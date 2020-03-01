@@ -31,8 +31,9 @@ RUN apt-get install -y unzip
 # Install Node 12
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash && \
-    sudo apt-get install -y nodejs && \
-    apt-get install -y npm
+    sudo apt-get install -y nodejs
+
+RUN apt-get install -y npm
 
 # Install npm 6.8
 RUN npm install -g npm@6.8.0
