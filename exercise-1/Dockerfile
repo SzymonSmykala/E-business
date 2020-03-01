@@ -31,20 +31,20 @@ RUN apt-get install -y unzip
 
 # Install Node 12
 
-RUN apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates && \
-    curl -sL https://deb.nodesource.com/setup_12.x 
-    
+RUN curl -sL https://deb.nodesource.com/setup_12.x && \ 
+    apt-get install -y nodejs && \
+    apt-get install -y npm
+
 # Install npm 6.8
-
-
+RUN npm install -g npm@6.8.0
 
 # Verify
 RUN java -version  
 RUN scala -version
-RUN sbt sbtVersion
+# RUN sbt sbtVersion
 RUN unzip -v
 RUN node --version
-
+RUN npm --version
 
 
 CMD ["bash"]
