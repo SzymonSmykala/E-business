@@ -1,7 +1,8 @@
 FROM ubuntu
 RUN apt-get update && \
     apt-get install -y wget && \
-    apt-get install -y curl;
+    apt-get install -y curl && \
+    apt-get install sudo -y 
 
 # Install Java8
 RUN apt-get update && \
@@ -24,21 +25,21 @@ RUN \
 
 # Install vim, git, unzip
 RUN apt install -y vim
-RUN vim --version
 RUN apt install -y git
-RUN git --version
 RUN apt-get install -y unzip
 
 # Install Node 12
 
-RUN curl -sL https://deb.nodesource.com/setup_12.x && \ 
-    apt-get install -y nodejs && \
+RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash && \
+    sudo apt-get install -y nodejs && \
     apt-get install -y npm
 
 # Install npm 6.8
 RUN npm install -g npm@6.8.0
 
 # Verify
+RUN vim --version
+RUN git --version
 RUN java -version  
 RUN scala -version
 # RUN sbt sbtVersion
