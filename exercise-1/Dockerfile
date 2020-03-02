@@ -37,7 +37,14 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash && \
 # Install npm 6.8
 RUN npm install -g npm@6.8.0
 
+# Install Volume
 VOLUME /home/szymon.smykala/projekt
+
+# Expose ports
+EXPOSE 8000 
+EXPOSE 9000 
+EXPOSE 5000
+EXPOSE 8888
 
 # Verify
 RUN vim --version
@@ -48,6 +55,5 @@ RUN scala -version
 RUN unzip -v
 RUN node --version
 RUN npm --version
-
 
 CMD ["bash"]

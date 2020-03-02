@@ -1,1 +1,1 @@
-docker build -t exercise-1 . && docker run -it exercise-1 
+docker build -t exercise-1 . && docker run -p 8000:8000 -it exercise-1 
