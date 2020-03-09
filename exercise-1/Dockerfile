@@ -51,7 +51,7 @@ RUN vim --version
 RUN git --version
 RUN java -version  
 RUN scala -version
-# RUN sbt sbtVersion
+RUN sbt sbtVersion
 RUN unzip -v
 RUN node --version
 RUN npm --version
