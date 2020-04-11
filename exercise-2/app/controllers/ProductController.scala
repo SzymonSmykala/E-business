@@ -25,8 +25,10 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
     Ok(Json.toJson(result));
   }
 
-  def update(product: Product) = Action {
-
+  def update() = Action { request =>
+    val json = request.body.asJson.get
+    val product = json.as[Product]
+    print(product)
     Ok(Json.toJson(product))
   }
 
@@ -35,5 +37,9 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
       val product = json.as[Product]
       print(product)
       Ok(Json.toJson(product))
+  }
+
+  def delete(id: Long) = Action{
+    Ok(Json.toJson("completed"))
   }
 }
