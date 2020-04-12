@@ -55,7 +55,7 @@ POST    /payments                   controllers.PaymentController.add
 ## Users
 
 
-## Favourites ites
+## Favourites items
 
 
 ## Product questions
