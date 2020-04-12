@@ -59,7 +59,11 @@ DELETE  /promos/:id               controllers.PromoController.delete(id: Long)
 
 
 ## Favourites items
-
+GET     /favoriteItems                   controllers.FavoriteItemsController.readAll
+GET     /favoriteItems/:id               controllers.FavoriteItemsController.get(id: Long)
+PUT     /favoriteItems                   controllers.FavoriteItemsController.update
+POST    /favoriteItems                   controllers.FavoriteItemsController.add
+DELETE  /favoriteItems/:id               controllers.FavoriteItemsController.delete(id: Long)
 
 ## Product questions
 
