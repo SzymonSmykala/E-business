@@ -49,8 +49,11 @@ PUT     /payments                   controllers.PaymentController.update
 POST    /payments                   controllers.PaymentController.add
 
 ## Promo
-
-
+GET     /promos                   controllers.PromoController.readAll
+GET     /promos/:id               controllers.PromoController.get(id: Long)
+PUT     /promos                   controllers.PromoController.update
+POST    /promos                   controllers.PromoController.add
+DELETE  /promos/:id               controllers.PromoController.delete(id: Long)
 
 ## Users
 
