@@ -21,9 +21,16 @@ POST    /products                   controllers.ProductController.add
 DELETE  /products/:id               controllers.ProductController.delete(id: Long)
 
 
-## BusketItems
+## BasketItems
 GET     /basketItems                   controllers.BasketItemsController.readAll
 GET     /basketItems/:id               controllers.BasketItemsController.get(id: Long)
 PUT     /basketItems                   controllers.BasketItemsController.update
 POST    /basketItems                   controllers.BasketItemsController.add
 DELETE  /basketItems/:id               controllers.BasketItemsController.delete(id: Long)
+
+## Basket
+GET     /basket                   controllers.BasketController.readAll
+GET     /basket/:id               controllers.BasketController.get(id: Long)
+PUT     /basket                   controllers.BasketController.update
+POST    /basket                   controllers.BasketController.add
+DELETE  /basket/:id               controllers.BasketController.delete(id: Long)
