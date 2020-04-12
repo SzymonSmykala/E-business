@@ -22,11 +22,11 @@ DELETE  /products/:id               controllers.ProductController.delete(id: Lon
 
 
 ## BasketItems
-GET     /basketItems                   controllers.BasketItemsController.readAll
-GET     /basketItems/:id               controllers.BasketItemsController.get(id: Long)
-PUT     /basketItems                   controllers.BasketItemsController.update
-POST    /basketItems                   controllers.BasketItemsController.add
-DELETE  /basketItems/:id               controllers.BasketItemsController.delete(id: Long)
+GET     /basketItems                controllers.BasketItemsController.readAll
+GET     /basketItems/:id            controllers.BasketItemsController.get(id: Long)
+PUT     /basketItems                controllers.BasketItemsController.update
+POST    /basketItems                controllers.BasketItemsController.add
+DELETE  /basketItems/:id            controllers.BasketItemsController.delete(id: Long)
 
 ## Basket
 GET     /basket                   controllers.BasketController.readAll
@@ -66,6 +66,10 @@ POST    /favoriteItems                   controllers.FavoriteItemsController.add
 DELETE  /favoriteItems/:id               controllers.FavoriteItemsController.delete(id: Long)
 
 ## Product questions
-
+GET     /productQuestions                   controllers.productQuestionsController.readAll
+GET     /productQuestions/:id               controllers.productQuestionsController.get(id: Long)
+PUT     /productQuestions                   controllers.productQuestionsController.update
+POST    /productQuestions                   controllers.productQuestionsController.add
+DELETE  /productQuestions/:id               controllers.productQuestionsController.delete(id: Long)
 
 ## Product description
