@@ -66,10 +66,15 @@ POST    /favoriteItems                   controllers.FavoriteItemsController.add
 DELETE  /favoriteItems/:id               controllers.FavoriteItemsController.delete(id: Long)
 
 ## Product questions
-GET     /productQuestions                   controllers.productQuestionsController.readAll
-GET     /productQuestions/:id               controllers.productQuestionsController.get(id: Long)
-PUT     /productQuestions                   controllers.productQuestionsController.update
-POST    /productQuestions                   controllers.productQuestionsController.add
-DELETE  /productQuestions/:id               controllers.productQuestionsController.delete(id: Long)
+GET     /productQuestions                   controllers.ProductQuestionsController.readAll
+GET     /productQuestions/:id               controllers.ProductQuestionsController.get(id: Long)
+PUT     /productQuestions                   controllers.ProductQuestionsController.update
+POST    /productQuestions                   controllers.ProductQuestionsController.add
+DELETE  /productQuestions/:id               controllers.ProductQuestionsController.delete(id: Long)
 
 ## Product description
+GET     /productDescriptions                   controllers.ProductDescriptionController.readAll
+GET     /productDescriptions/:id               controllers.ProductDescriptionController.get(id: Long)
+PUT     /productDescriptions                   controllers.ProductDescriptionController.update
+POST    /productDescriptions                   controllers.ProductDescriptionController.add
+DELETE  /productDescriptions/:id               controllers.ProductDescriptionController.delete(id: Long)
