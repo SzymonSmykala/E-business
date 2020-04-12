@@ -41,3 +41,10 @@ GET     /orders/:id               controllers.OrderController.get(id: Long)
 PUT     /orders                   controllers.OrderController.update
 POST    /orders                   controllers.OrderController.add
 DELETE  /orders/:id               controllers.OrderController.delete(id: Long)
+
+## Payments
+GET     /payments                   controllers.PaymentController.readAll
+GET     /payments/:id               controllers.PaymentController.get(id: Long)
+PUT     /payments                   controllers.PaymentController.update
+POST    /payments                   controllers.PaymentController.add
+DELETE  /payments/:id               controllers.PaymentController.delete(id: Long)
