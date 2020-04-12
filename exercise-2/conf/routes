@@ -19,3 +19,11 @@ GET     /products/:id               controllers.ProductController.get(id: Long)
 PUT     /products                   controllers.ProductController.update
 POST    /products                   controllers.ProductController.add
 DELETE  /products/:id               controllers.ProductController.delete(id: Long)
+
+
+## BusketItems
+GET     /basketItems                   controllers.BasketItemsController.readAll
+GET     /basketItems/:id               controllers.BasketItemsController.get(id: Long)
+PUT     /basketItems                   controllers.BasketItemsController.update
+POST    /basketItems                   controllers.BasketItemsController.add
+DELETE  /basketItems/:id               controllers.BasketItemsController.delete(id: Long)
