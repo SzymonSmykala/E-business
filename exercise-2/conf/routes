@@ -47,4 +47,18 @@ GET     /payments                   controllers.PaymentController.readAll
 GET     /payments/:id               controllers.PaymentController.get(id: Long)
 PUT     /payments                   controllers.PaymentController.update
 POST    /payments                   controllers.PaymentController.add
-DELETE  /payments/:id               controllers.PaymentController.delete(id: Long)
+
+## Promo
+
+
+
+## Users
+
+
+## Favourites ites
+
+
+## Product questions
+
+
+## Product description
