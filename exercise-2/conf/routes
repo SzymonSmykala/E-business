@@ -56,7 +56,8 @@ POST    /promos                   controllers.PromoController.add
 DELETE  /promos/:id               controllers.PromoController.delete(id: Long)
 
 ## Users
-
+POST /login                       controllers.UserController.login
+POST /register                    controllers.UserController.register
 
 ## Favourites items
 GET     /favoriteItems                   controllers.FavoriteItemsController.readAll
