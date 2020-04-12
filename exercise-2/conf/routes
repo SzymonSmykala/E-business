@@ -34,3 +34,10 @@ GET     /basket/:id               controllers.BasketController.get(id: Long)
 PUT     /basket                   controllers.BasketController.update
 POST    /basket                   controllers.BasketController.add
 DELETE  /basket/:id               controllers.BasketController.delete(id: Long)
+
+## Order
+GET     /orders                   controllers.OrderController.readAll
+GET     /orders/:id               controllers.OrderController.get(id: Long)
+PUT     /orders                   controllers.OrderController.update
+POST    /orders                   controllers.OrderController.add
+DELETE  /orders/:id               controllers.OrderController.delete(id: Long)
