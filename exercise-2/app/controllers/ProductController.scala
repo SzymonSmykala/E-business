@@ -1,28 +1,25 @@
 package controllers
 
-import DTO.Product
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
 import play.api.libs.json._
 import javax.inject._
+import models.ProductRepository
+import repositories.DTO.Product
 
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 
 @Singleton
-class ProductController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class ProductController @Inject()(productsRepository: ProductRepository, cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
-  def readAll = Action {
-    var result: ListBuffer[Product] = ListBuffer();
-    for (i <- 0 to 10){
-        result += Product(s"Product$i ", i + 1, i);
+  def get(id: Long) = Action.async {
+    val result = productsRepository.getById(id)
+    result map {r =>
+      Ok(Json.toJson(r));
     }
-    Ok(Json.toJson(result.toList))
-  }
-
-  def get(id: Long) = Action {
-    var result = Product("name", 1, 1)
-    Ok(Json.toJson(result));
   }
 
   def update() = Action { request =>
@@ -32,12 +29,21 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
     Ok(Json.toJson(product))
   }
 
-  def add() = Action { request =>
+  def add():Action[AnyContent] = Action.async{ implicit request: MessagesRequest[AnyContent]  =>
       val json = request.body.asJson.get
       val product = json.as[Product]
-      print(product)
-      Ok(Json.toJson(product))
+      val inserted : Future[Product] = productsRepository.create(product.name, product.categoryId, product.id)
+      inserted map {
+        i =>
+          Ok(Json.toJson(i))
+      }
   }
+
+  def readAll: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val products = productsRepository.list()
+    products.map(prod => Ok(Json.toJson(prod)))
+  }
+
 
   def delete(id: Long) = Action{
     Ok(Json.toJson("completed"))

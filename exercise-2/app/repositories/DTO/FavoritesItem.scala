@@ -1,4 +1,4 @@
-package DTO
+package repositories.DTO
 
 import play.api.libs.json.Json
 

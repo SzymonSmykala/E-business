@@ -1,9 +1,9 @@
 package controllers
 
-import DTO.User
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
+import repositories.DTO.User
 
 @Singleton
 class UserController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {

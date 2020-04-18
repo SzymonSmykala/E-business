@@ -2,12 +2,12 @@ package controllers
 
 import java.util.Date
 
-import DTO.Promo
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 import play.api.libs.json._
 import javax.inject._
 import org.joda.time.DateTime
+import repositories.DTO.Promo
 
 import scala.collection.mutable.ListBuffer
 
