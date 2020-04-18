@@ -22,11 +22,11 @@ class ProductController @Inject()(productsRepository: ProductRepository, cc: Mes
     }
   }
 
-  def update() = Action { request =>
+  def update() = Action.async { request =>
     val json = request.body.asJson.get
     val product = json.as[Product]
-    print(product)
-    Ok(Json.toJson(product))
+    val updateResult = productsRepository.update(product.id, product)
+    updateResult map {r => Ok(Json.toJson(product))}
   }
 
   def add():Action[AnyContent] = Action.async{ implicit request: MessagesRequest[AnyContent]  =>
@@ -44,8 +44,10 @@ class ProductController @Inject()(productsRepository: ProductRepository, cc: Mes
     products.map(prod => Ok(Json.toJson(prod)))
   }
 
-
-  def delete(id: Long) = Action{
-    Ok(Json.toJson("completed"))
+  def delete(id: Long) = Action.async{
+    val deleteResult = productsRepository.delete(id)
+    deleteResult map {
+      r => Ok(Json.toJson(r))
+    }
   }
 }

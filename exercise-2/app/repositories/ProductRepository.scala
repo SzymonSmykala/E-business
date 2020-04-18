@@ -25,7 +25,6 @@ class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
   val product = TableQuery[ProductTable]
 
   def create(name: String, categoryId: Long, id: Long): Future[Product] = db.run {
-    logger.info("CREATING!")
     (product.map(c => (c.name, c.categoryId))
       returning product.map(_.id)
       into {case ((name, categoryId), id) => Product(name, categoryId, id)}
@@ -40,8 +39,16 @@ class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
     product.filter(_.id === id).result.head
   }
 
-  def delete(id: Long) = db.run {
+  def delete(id: Long): Future[Int] = db.run {
     product.filter(_.id === id).delete
   }
+
+  def update(id: Long, newProduct: Product): Future[Unit] = {
+    val productToUpdate: Product = newProduct.copy(newProduct.name, newProduct.categoryId, id)
+    db.run {
+      product.filter(_.id === id).update(productToUpdate).map(_ => ())
+    }
+  }
+
 }
 
