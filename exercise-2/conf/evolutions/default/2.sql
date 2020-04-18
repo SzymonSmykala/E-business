@@ -2,6 +2,8 @@
 
 INSERT INTO "category"("name") VALUES("sample1");
 INSERT INTO "category"("name") VALUES("sample2");
+INSERT INTO "product"("name", "category_id") VALUES ("myName", 1)
+
 
 # --- !Downs
 
