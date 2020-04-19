@@ -1,4 +1,4 @@
-package repositories.DTO
+package models
 
 import play.api.libs.json.Json
 

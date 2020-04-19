@@ -2,9 +2,7 @@ package models
 
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
-import repositories.DTO.Product
 import slick.jdbc.JdbcProfile
-import play.api.Logger
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -14,7 +12,6 @@ class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
 
   import dbConfig._
   import profile.api._
-  val logger: Logger = Logger(this.getClass())
   class ProductTable(tag: Tag) extends Table[Product](tag, "product") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def categoryId = column[Long]("category_id")

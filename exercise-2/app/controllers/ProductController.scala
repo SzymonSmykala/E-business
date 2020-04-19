@@ -4,8 +4,7 @@ import javax.inject.Inject
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
 import play.api.libs.json._
 import javax.inject._
-import models.ProductRepository
-import repositories.DTO.Product
+import models.{Product, ProductRepository}
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration.Duration

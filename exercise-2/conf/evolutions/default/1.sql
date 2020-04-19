@@ -12,6 +12,7 @@ CREATE TABLE "product" (
 --  FOREIGN KEY(category) references category(id)
 );
 
+
 # --- !Downs
 
 DROP TABLE "category"

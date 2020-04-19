@@ -6,8 +6,8 @@ import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 import play.api.libs.json._
 import javax.inject._
+import models.Promo
 import org.joda.time.DateTime
-import repositories.DTO.Promo
 
 import scala.collection.mutable.ListBuffer
 
@@ -17,15 +17,13 @@ class PromoController @Inject()(cc: ControllerComponents) extends AbstractContro
 
   def readAll = Action {
     var result: ListBuffer[Promo] = ListBuffer();
-    for (i <- 0 to 10){
-      result += Promo(i, 1, DateTime.now(), DateTime.now(), 20);
-    }
+
     Ok(Json.toJson(result.toList))
   }
 
   def get(id: Long) = Action {
-    var result = Promo(1, 1, DateTime.now(), DateTime.now(), 20);
-    Ok(Json.toJson(result));
+
+    Ok(Json.toJson("empty"));
   }
 
   def update() = Action { request =>

@@ -4,7 +4,7 @@ import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 import play.api.libs.json._
 import javax.inject._
-import repositories.DTO.Basket
+import models.Basket
 
 import scala.collection.mutable.ListBuffer
 
