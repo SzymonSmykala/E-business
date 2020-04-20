@@ -4,42 +4,50 @@ import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 import play.api.libs.json._
 import javax.inject._
-import models.FavoriteItem
+import models.{FavoriteItem, FavoriteItemsRepository}
 
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.ExecutionContext
 
 
 @Singleton
-class FavoriteItemsController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class FavoriteItemsController @Inject()(cc: ControllerComponents, favoriteItemsRepository: FavoriteItemsRepository) (implicit ec: ExecutionContext) extends AbstractController(cc) {
 
-  def readAll = Action {
-    var result: ListBuffer[FavoriteItem] = ListBuffer();
-    for (i <- 0 to 10){
-      result += FavoriteItem(i, 1, 2);
+
+  def readAll = Action.async {
+    val result = favoriteItemsRepository.list()
+    result map { r =>
+      Ok(Json.toJson(r))
     }
-    Ok(Json.toJson(result.toList))
   }
 
-  def get(id: Long) = Action {
-    var result = FavoriteItem(1, 1,2)
-    Ok(Json.toJson(result));
+  def get(id: Long) = Action.async {
+    val result = favoriteItemsRepository.getById(id);
+    result map { r =>
+      Ok(Json.toJson(r))
+    }
   }
 
-  def update() = Action { request =>
+  def add() = Action.async { request =>
     val json = request.body.asJson.get
-    val order = json.as[FavoriteItem]
-    print(order)
-    Ok(Json.toJson(order))
+    val favItem = json.as[FavoriteItem]
+    val result = favoriteItemsRepository.create(favItem.id, favItem.userId, favItem.productId)
+    result map { r =>
+      Ok(Json.toJson(r))
+    }
   }
 
-  def add() = Action { request =>
-    val json = request.body.asJson.get
-    val order = json.as[FavoriteItem]
-    print(order)
-    Ok(Json.toJson(order))
+  def delete(id: Long) = Action.async {
+    val result = favoriteItemsRepository.delete(id)
+    result map { r =>
+      Ok(Json.toJson(r))
+    }
   }
 
-  def delete(id: Long) = Action{
-    Ok(Json.toJson("completed"))
+  def getByUserId(user_id: Long) = Action.async{
+    val result = favoriteItemsRepository.getFavoriteItemsByUserId(user_id)
+    result map {
+      r => Ok(Json.toJson(r))
+    }
   }
 }

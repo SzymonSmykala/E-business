@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.Json
 
-case class FavoriteItem(var id: Float, var userId: Float, var productId: Float)
+case class FavoriteItem(var id: Long, var userId: Long, var productId: Long)
 
 object FavoriteItem{
   implicit val favoriteItemFormat = Json.format[FavoriteItem]
