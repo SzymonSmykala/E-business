@@ -13,7 +13,7 @@ class PaymentRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
   import profile.api._
 
   private val payment = TableQuery[PaymentTable]
-  private class PaymentTable(tag: Tag) extends Table[Payment](tag, "payment") {
+  class PaymentTable(tag: Tag) extends Table[Payment](tag, "payment") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def status = column[String]("status")
     def * = (id, status) <> ((Payment.apply _).tupled, Payment.unapply)
