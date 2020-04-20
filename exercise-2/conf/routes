@@ -24,7 +24,7 @@ DELETE  /products/:id               controllers.ProductController.delete(id: Lon
 ## BasketItems
 GET     /basketItems                controllers.BasketItemsController.readAll
 GET     /basketItems/:id            controllers.BasketItemsController.get(id: Long)
-PUT     /basketItems                controllers.BasketItemsController.update
+GET     /basketItems/basket/:basket_id controllers.BasketItemsController.getByBasketId(basket_id: Long)
 POST    /basketItems                controllers.BasketItemsController.add
 DELETE  /basketItems/:id            controllers.BasketItemsController.delete(id: Long)
 

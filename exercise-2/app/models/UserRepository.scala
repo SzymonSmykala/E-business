@@ -12,7 +12,7 @@ class UserRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implic
   import dbConfig._
   import profile.api._
 
-  private val user = TableQuery[UserTable]
+  val user = TableQuery[UserTable]
   class UserTable(tag: Tag) extends Table[User](tag, "user") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def email = column[String]("email")

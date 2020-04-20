@@ -16,10 +16,10 @@ class BasketRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, user
   private val userTable = TableQuery[UserTable]
 
   private val basket = TableQuery[BasketTable]
-  private class BasketTable(tag: Tag) extends Table[Basket](tag, "basket") {
+  class BasketTable(tag: Tag) extends Table[Basket](tag, "basket") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def user = column[Long]("user_id")
-    def user_fk = foreignKey("userTable_fk",user, userTable)(_.id)
+    private def user_fk = foreignKey("userTable_fk",user, userTable)(_.id)
     def * = (id, user) <> ((Basket.apply _).tupled, Basket.unapply)
   }
 
