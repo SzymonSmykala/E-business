@@ -13,41 +13,37 @@ class BasketRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, user
   import profile.api._
 
   import userRepository.UserTable
-  private val prod = TableQuery[UserTable]
+  private val userTable = TableQuery[UserTable]
 
   private val basket = TableQuery[BasketTable]
-  private class BasketTable(tag: Tag) extends Table[ProductDescription](tag, "basket") {
+  private class BasketTable(tag: Tag) extends Table[Basket](tag, "basket") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-    def product = column[Long]("user_id")
-    def description = column[String]("description")
-    def product_fk = foreignKey("prod_fk",product, prod)(_.id)
-    def * = (id, product, description) <> ((ProductDescription.apply _).tupled, ProductDescription.unapply)
+    def user = column[Long]("user_id")
+    def user_fk = foreignKey("userTable_fk",user, userTable)(_.id)
+    def * = (id, user) <> ((Basket.apply _).tupled, Basket.unapply)
   }
 
-//  def create(id: Long, product_id: Long, description: String): Future[ProductDescription] = db.run {
-//    (productDescription.map(c => (c.product, c.description))
-//      returning productDescription.map(_.id)
-//      into {case ((product, description), id) => ProductDescription(id, product, description)}
-//      ) += (product_id, description)
-//  }
-//
-//  def list(): Future[Seq[ProductDescription]] = db.run {
-//    productDescription.result
-//  }
-//
-//  def getById(id: Long): Future[ProductDescription] = db.run{
-//    productDescription.filter(_.id === id).result.head
-//  }
-//
-//  def delete(id: Long): Future[Int] = db.run {
-//    productDescription.filter(_.id === id).delete
-//  }
-//
-//  def update(id: Long, newProductDescription: ProductDescription): Future[Unit] = {
-//    val productToUpdate: ProductDescription = newProductDescription.copy(id, newProductDescription.productId, newProductDescription.description)
-//    db.run {
-//      productDescription.filter(_.id === id).update(productToUpdate).map(_ => ())
-//    }
-//  }
+  def create(id: Long, user_id: Long): Future[Basket] = db.run {
+    (basket.map(c => (c.user))
+      returning basket.map(_.id)
+      into {case ((user), id) => Basket(id, user)}
+      ) += (user_id)
+  }
+
+  def list(): Future[Seq[Basket]] = db.run {
+    basket.result
+  }
+
+  def getById(id: Long): Future[Basket] = db.run{
+    basket.filter(_.id === id).result.head
+  }
+
+  def delete(id: Long): Future[Int] = db.run {
+    basket.filter(_.id === id).delete
+  }
+
+  def getBasketByUserId(user_id: Long): Future[Basket] = db.run {
+    basket.filter(_.user === user_id).result.head
+  }
 
 }
