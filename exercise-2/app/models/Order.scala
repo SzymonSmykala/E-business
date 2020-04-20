@@ -1,8 +1,8 @@
-package DTO
+package models
 
 import play.api.libs.json.Json
 
-case class Order(var id: Float, var basketId: Float, var paymentId: Float)
+case class Order(var id: Long, var basketId: Long, var paymentId: Long)
 
 object Order{
   implicit val orderFormat = Json.format[Order];

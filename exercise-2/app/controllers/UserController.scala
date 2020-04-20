@@ -1,23 +1,34 @@
 package controllers
 
-import DTO.User
 import javax.inject.{Inject, Singleton}
+import models.{User, UserRepository}
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 
-@Singleton
-class UserController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+import scala.concurrent.ExecutionContext
 
-    def login = Action { request =>
-      var json = request.body.asJson.get
-      var user = json.as[User]
-      Ok(Json.toJson("Success"))
+@Singleton
+class UserController @Inject()(cc: ControllerComponents, userRepository: UserRepository) (implicit ec: ExecutionContext) extends AbstractController(cc) {
+
+    def login = Action.async { request =>
+      val json = request.body.asJson.get
+      val user = json.as[User]
+      val result = userRepository.getByEmail(user.email)
+
+      result map {
+        r => {
+            Ok(Json.toJson(r))
+        }
+      }
     }
 
-    def register = Action { request =>
+    def register = Action.async { request =>
       var json = request.body.asJson.get
       var user = json.as[User]
-      Ok(Json.toJson("Success"))
+      var result = userRepository.create(user.id, user.email, user.password)
+      result map {
+        r => Ok(Json.toJson(user.id))
+      }
     }
 
 }

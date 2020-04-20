@@ -1,46 +1,50 @@
 package controllers
 
-
-import DTO.ProductQuestion
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import play.api.libs.json._
 import javax.inject._
+import models.{ProductQuestion, ProductQuestionRepository}
 
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.ExecutionContext
 
 
 @Singleton
-class ProductQuestionsController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class ProductQuestionsController @Inject()(cc: ControllerComponents, productQuestionRepository: ProductQuestionRepository) (implicit ec: ExecutionContext)extends AbstractController(cc) {
 
-  def readAll = Action {
-    var result: ListBuffer[ProductQuestion] = ListBuffer();
-    for (i <- 0 to 10){
-      result += ProductQuestion(i, 2, "content")
+  def readAll: Action[AnyContent] = Action.async {
+    val result = productQuestionRepository.list()
+    result map { r => Ok(Json.toJson(r));};
+  }
+
+  def get(id: Long) = Action.async {
+    val result = productQuestionRepository.getById(id)
+    result map { r => Ok(Json.toJson(r));};
+  }
+
+  def update() = Action.async { request =>
+    val json = request.body.asJson.get
+    val product = json.as[ProductQuestion]
+    val result = productQuestionRepository.update(product.id, product)
+    result map {
+      r => Ok(Json.toJson(product))
     }
-    Ok(Json.toJson(result.toList))
   }
 
-  def get(id: Long) = Action {
-    var result = ProductQuestion(id, 2, "content")
-    Ok(Json.toJson(result));
-  }
-
-  def update() = Action { request =>
+  def add() = Action.async { request =>
     val json = request.body.asJson.get
-    val product = json.as[ProductQuestion]
-    print(product)
-    Ok(Json.toJson(product))
+    val productQuestion = json.as[ProductQuestion]
+    val result = productQuestionRepository.create(productQuestion.id, productQuestion.productId, productQuestion.questionContent)
+    result map {
+      r => Ok(Json.toJson(productQuestion))
+    }
   }
 
-  def add() = Action { request =>
-    val json = request.body.asJson.get
-    val product = json.as[ProductQuestion]
-    print(product)
-    Ok(Json.toJson(product))
-  }
-
-  def delete(id: Long) = Action{
-    Ok(Json.toJson("completed"))
+  def delete(id: Long) = Action.async{
+    val result = productQuestionRepository.delete(id)
+    result map {
+      r => Ok(Json.toJson(r))
+    }
   }
 }

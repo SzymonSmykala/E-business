@@ -1,45 +1,51 @@
 package controllers
 
-import DTO.{BasketItem}
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 import play.api.libs.json._
 import javax.inject._
+import models.{BasketItem, BasketItemRepository}
 
-import scala.collection.mutable.ListBuffer
+import scala.concurrent.ExecutionContext
 
 
 @Singleton
-class BasketItemsController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class BasketItemsController @Inject()(cc: ControllerComponents, basketItemRepository: BasketItemRepository)(implicit ec: ExecutionContext) extends AbstractController(cc) {
 
-  def readAll = Action {
-    var result: ListBuffer[BasketItem] = ListBuffer();
-    for (i <- 0 to 10){
-      result += BasketItem(i, 1,2,3);
+  def readAll = Action.async {
+    val result = basketItemRepository.list()
+    result map { r =>
+      Ok(Json.toJson(r))
     }
-    Ok(Json.toJson(result.toList))
   }
 
-  def get(id: Long) = Action {
-    var result = BasketItem(1, 1, 1,1)
-    Ok(Json.toJson(result));
+  def get(id: Long) = Action.async {
+    val result = basketItemRepository.getById(id);
+    result map { r =>
+      Ok(Json.toJson(r))
+    }
   }
 
-  def update() = Action { request =>
+  def add() = Action.async { request =>
     val json = request.body.asJson.get
-    val product = json.as[BasketItem]
-    print(product)
-    Ok(Json.toJson(product))
+    val basketItem = json.as[BasketItem]
+    val result = basketItemRepository.create(basketItem.id, basketItem.productId, basketItem.count, basketItem.basketId)
+    result map { r =>
+      Ok(Json.toJson(r))
+    }
   }
 
-  def add() = Action { request =>
-    val json = request.body.asJson.get
-    val product = json.as[BasketItem]
-    print(product)
-    Ok(Json.toJson(product))
+  def delete(id: Long) = Action.async {
+    val result = basketItemRepository.delete(id)
+    result map { r =>
+      Ok(Json.toJson(r))
+    }
   }
 
-  def delete(id: Long) = Action{
-    Ok(Json.toJson("completed"))
+  def getByBasketId(basket_id: Long) = Action.async{
+    val result = basketItemRepository.getBasketItemsByBasketId(basket_id)
+    result map {
+      r => Ok(Json.toJson(r))
+    }
   }
 }

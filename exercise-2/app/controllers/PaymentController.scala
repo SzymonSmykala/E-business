@@ -1,42 +1,52 @@
 package controllers
 
-import DTO.Payment
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesRequest}
 import play.api.libs.json._
 import javax.inject._
+import models.{Payment, PaymentRepository}
 
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class PaymentController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class PaymentController @Inject()(cc: ControllerComponents, paymentRepository: PaymentRepository)(implicit ec: ExecutionContext)  extends AbstractController(cc) {
 
-  def readAll = Action {
-    var result: ListBuffer[Payment] = ListBuffer();
-    for (i <- 0 to 10){
-      result += Payment(i, "Confirmed");
+  def get(id: Long) = Action.async {
+    val result = paymentRepository.getById(id)
+    result map {r =>
+      Ok(Json.toJson(r));
     }
-    Ok(Json.toJson(result.toList))
   }
 
-  def get(id: Long) = Action {
-    var result = Payment(1, "Confirmed")
-    Ok(Json.toJson(result));
-  }
-
-  def update() = Action { request =>
+  def update() = Action.async { request =>
     val json = request.body.asJson.get
-    val product = json.as[Payment]
-    print(product)
-    Ok(Json.toJson(product))
+    val payment = json.as[Payment]
+    val updateResult = paymentRepository.update(payment.id, payment)
+    updateResult map {r => Ok(Json.toJson(payment))}
   }
 
-  def add() = Action { request =>
+  def add() = Action.async { request =>
     val json = request.body.asJson.get
-    val product = json.as[Payment]
-    print(product)
-    Ok(Json.toJson(product))
+    val payment = json.as[Payment]
+    val inserted : Future[Payment] = paymentRepository.create(payment.id, payment.status)
+    inserted map {
+      i =>
+        Ok(Json.toJson(i))
+    }
+  }
+
+  def readAll = Action.async { request =>
+    val result = paymentRepository.list()
+    result.map(prod => Ok(Json.toJson(prod)))
+  }
+
+  def delete(id: Long) = Action.async{
+    val deleteResult = paymentRepository.delete(id)
+    deleteResult map {
+      r => Ok(Json.toJson(r))
+    }
   }
 
 }

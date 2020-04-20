@@ -1,45 +1,52 @@
 package controllers
 
-import DTO.Basket
 import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 import play.api.libs.json._
 import javax.inject._
+import models.{Basket, BasketRepository}
 
-import scala.collection.mutable.ListBuffer
+import scala.concurrent.ExecutionContext
 
 
 @Singleton
-class BasketController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class BasketController @Inject()(cc: ControllerComponents, basketRepository: BasketRepository)(implicit ec: ExecutionContext)  extends AbstractController(cc) {
 
-  def readAll = Action {
-    var result: ListBuffer[Basket] = ListBuffer();
-    for (i <- 0 to 10){
-      result += Basket(i, 1);
+  def readAll = Action.async {
+    val result = basketRepository.list()
+    result map { r =>
+      Ok(Json.toJson(r))
     }
-    Ok(Json.toJson(result.toList))
   }
 
-  def get(id: Long) = Action {
-    var result = Basket(1, 1)
-    Ok(Json.toJson(result));
+  def get(id: Long) = Action.async {
+    val result = basketRepository.getById(id);
+    result map { r =>
+      Ok(Json.toJson(r))
+    }
   }
 
-  def update() = Action { request =>
+  def add() = Action.async { request =>
     val json = request.body.asJson.get
     val product = json.as[Basket]
-    print(product)
-    Ok(Json.toJson(product))
+    val result = basketRepository.create(product.id, product.userId)
+    result map { r =>
+      Ok(Json.toJson(r))
+    }
   }
 
-  def add() = Action { request =>
-    val json = request.body.asJson.get
-    val product = json.as[Basket]
-    print(product)
-    Ok(Json.toJson(product))
+  def delete(id: Long) = Action.async {
+    val result = basketRepository.delete(id)
+    result map { r =>
+      Ok(Json.toJson(r))
+    }
   }
 
-  def delete(id: Long) = Action{
-    Ok(Json.toJson("completed"))
+  def getByUserId(user_id: Long) = Action.async{
+    val result = basketRepository.getBasketByUserId(user_id)
+    result map {
+      r => Ok(Json.toJson(r))
+    }
   }
+
 }
