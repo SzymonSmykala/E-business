@@ -7,22 +7,28 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
+class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext, categoryRepository: CategoryRepository) {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
+
+  import categoryRepository.CategoryTable
+
+  private val categoryTable = TableQuery[CategoryTable]
+
   class ProductTable(tag: Tag) extends Table[Product](tag, "product") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-    def categoryId = column[Long]("category_id")
+    def category = column[Long]("category_id")
     def name = column[String]("name")
-    def * = (name, categoryId, id) <> ((Product.apply _).tupled, Product.unapply)
+    private def category_fk = foreignKey("cat_fk", category, categoryTable)(_.id)
+    def * = (name, category, id) <> ((Product.apply _).tupled, Product.unapply)
   }
 
   val product = TableQuery[ProductTable]
 
   def create(name: String, categoryId: Long, id: Long): Future[Product] = db.run {
-    (product.map(c => (c.name, c.categoryId))
+    (product.map(c => (c.name, c.category))
       returning product.map(_.id)
       into {case ((name, categoryId), id) => Product(name, categoryId, id)}
       ) += (name, categoryId)

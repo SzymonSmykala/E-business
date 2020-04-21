@@ -9,7 +9,7 @@ CREATE TABLE "product" (
  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
  "name" VARCHAR NOT NULL,
  "category_id" INTEGER NOT NULL
---  FOREIGN KEY(category) references category(id)
+ FOREIGN KEY(category) references category(id)
 );
 
 
@@ -17,4 +17,3 @@ CREATE TABLE "product" (
 
 DROP TABLE "category"
 DROP TABLE "product"
-:
