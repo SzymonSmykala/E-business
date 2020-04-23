@@ -23,7 +23,8 @@ PUT     /category                   controllers.CategoryController.update
 POST    /category                   controllers.CategoryController.add
 DELETE  /category/:id               controllers.CategoryController.delete(id: Long)
 ## Category Forms
-#GET     /categoryAddForm            controllers.CategoryController.
+GET     /categoryAddForm            controllers.CategoryController.addCategoryForm
+POST    /categoryHandler            controllers.CategoryController.addCategoryFormHandler
 
 ## BasketItems
 GET     /basketItems                controllers.BasketItemsController.readAll

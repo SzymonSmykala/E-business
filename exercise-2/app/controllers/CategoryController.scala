@@ -1,7 +1,7 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesRequest, Request}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest, Request}
 import play.api.libs.json._
 import javax.inject._
 import models.{Category, CategoryRepository}
@@ -15,7 +15,7 @@ import scala.util.{Failure, Success}
 
 
 @Singleton
-class CategoryController @Inject()(cc: ControllerComponents)(implicit ec: ExecutionContext, categoryRepository: CategoryRepository)  extends AbstractController(cc) with play.api.i18n.I18nSupport {
+class CategoryController @Inject()(cc: MessagesControllerComponents)(implicit ec: ExecutionContext, categoryRepository: CategoryRepository)  extends MessagesAbstractController(cc)  {
 
   val categoryForm: Form[CreateCategoryForm] = Form {
     mapping(
@@ -26,6 +26,31 @@ class CategoryController @Inject()(cc: ControllerComponents)(implicit ec: Execut
 //  def addCategoryForm(): Action[AnyContent] = Action {
 //    Ok(views.html.addcategory(categoryForm))
 //  }
+
+  def addCategoryForm: Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.addcategory(categoryForm))
+  }
+
+//  def addCategoryFormHandler = Action { implicit request =>
+//    Ok("Ok");
+//  }
+
+  def addCategoryFormHandler = Action.async { implicit request =>
+
+    categoryForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.addcategory(errorForm))
+        )
+      },
+      product => {
+        categoryRepository.create(1, product.name).map { _ =>
+          Ok("Ok")
+        }
+      }
+    )
+
+  }
 
 //  def addProduct: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
 //    val categories = categoryRepository.list()
