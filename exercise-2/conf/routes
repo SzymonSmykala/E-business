@@ -33,12 +33,16 @@ GET     /basketItems/basket/:basket_id controllers.BasketItemsController.getByBa
 POST    /basketItems                controllers.BasketItemsController.add
 DELETE  /basketItems/:id            controllers.BasketItemsController.delete(id: Long)
 
+
 ## Basket
 GET     /basket                   controllers.BasketController.readAll
 GET     /basket/:id               controllers.BasketController.get(id: Long)
 GET     /basket/user/:user_id     controllers.BasketController.getByUserId(user_id: Long)
 POST    /basket                   controllers.BasketController.add
 DELETE  /basket/:id               controllers.BasketController.delete(id: Long)
+## Basket Forms
+GET     /basketAddForm            controllers.BasketController.addBasketForm
+POST    /basketHandler            controllers.BasketController.addBasketHandle
 
 ## Order
 GET     /orders                   controllers.OrderController.readAll

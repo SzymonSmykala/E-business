@@ -1,7 +1,7 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, ControllerComponents}
+import play.api.mvc.{AbstractController, ControllerComponents, MessagesAbstractController, MessagesControllerComponents}
 import play.api.libs.json._
 import javax.inject._
 import models.{BasketItem, BasketItemRepository}
@@ -10,7 +10,8 @@ import scala.concurrent.ExecutionContext
 
 
 @Singleton
-class BasketItemsController @Inject()(cc: ControllerComponents, basketItemRepository: BasketItemRepository)(implicit ec: ExecutionContext) extends AbstractController(cc) {
+class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketItemRepository: BasketItemRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+
 
   def readAll = Action.async {
     val result = basketItemRepository.list()
