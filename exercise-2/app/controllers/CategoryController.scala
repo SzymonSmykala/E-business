@@ -23,17 +23,11 @@ class CategoryController @Inject()(cc: MessagesControllerComponents)(implicit ec
     )(CreateCategoryForm.apply)(CreateCategoryForm.unapply)
   }
 
-//  def addCategoryForm(): Action[AnyContent] = Action {
-//    Ok(views.html.addcategory(categoryForm))
-//  }
 
   def addCategoryForm: Action[AnyContent] = Action { implicit request =>
     Ok(views.html.addcategory(categoryForm))
   }
 
-//  def addCategoryFormHandler = Action { implicit request =>
-//    Ok("Ok");
-//  }
 
   def addCategoryFormHandler = Action.async { implicit request =>
 
@@ -51,33 +45,6 @@ class CategoryController @Inject()(cc: MessagesControllerComponents)(implicit ec
     )
 
   }
-
-//  def addProduct: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-//    val categories = categoryRepository.list()
-//    Ok(views.html.addcategory(categoryForm))
-//  }
-//
-//  def addCategoryForm = Action  { implicit request: Request[AnyContent] =>
-//    Ok(views.html.addcategory(categoryForm))
-//   }
-
-
-//  def addCategoryFormHandle = Action.async { implicit request =>
-//
-//    categoryForm.bindFromRequest.fold(
-//      errorForm => {
-//        Future.successful(
-//          BadRequest(views.html.addcategory(errorForm))
-//        )
-//      },
-//      category => {
-//        categoryRepository.create(1, category.name).map { _ =>
-//          Redirect(routes.CategoryController.get(1)).flashing("success" -> "product.created")
-//        }
-//      }
-//    )
-//
-//  }
 
   def get(id: Long) = Action.async {
     val result = categoryRepository.getById(id)

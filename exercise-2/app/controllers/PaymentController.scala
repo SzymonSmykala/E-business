@@ -6,12 +6,12 @@ import play.api.libs.json._
 import javax.inject._
 import models.{Payment, PaymentRepository}
 
-import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
 class PaymentController @Inject()(cc: ControllerComponents, paymentRepository: PaymentRepository)(implicit ec: ExecutionContext)  extends AbstractController(cc) {
+
 
   def get(id: Long) = Action.async {
     val result = paymentRepository.getById(id)
