@@ -107,3 +107,5 @@ PUT     /productDescriptions                   controllers.ProductDescriptionCon
 POST    /productDescriptions                   controllers.ProductDescriptionController.add
 DELETE  /productDescriptions/:id               controllers.ProductDescriptionController.delete(id: Long)
 ## Product description forms
+GET     /productDescriptionForm             controllers.ProductDescriptionController.addProductQuestionForm
+POST    /productDescritionHandle            controllers.ProductDescriptionController.addProductQuestionHandle

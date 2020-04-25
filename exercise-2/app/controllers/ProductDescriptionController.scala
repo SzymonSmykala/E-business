@@ -1,20 +1,20 @@
 package controllers
 
 import javax.inject.{Inject, _}
-import models.{ProductDescription, ProductDescriptionRepository}
+import models.{Product, ProductDescription, ProductDescriptionRepository, ProductRepository}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.libs.json._
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.mvc.{Action, AnyContent, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
 
-import play.api.mvc.{Action, AnyContent, MessagesAbstractController, MessagesControllerComponents}
-
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 
 @Singleton
-class ProductDescriptionController @Inject()(cc: MessagesControllerComponents, productDescriptionRepository: ProductDescriptionRepository)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
+class ProductDescriptionController @Inject()(cc: MessagesControllerComponents, productDescriptionRepository: ProductDescriptionRepository, productRepository: ProductRepository)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
 
   val productDescriptionCreateForm: Form[ProductDescriptionCreateForm] = Form {
     mapping(
@@ -22,6 +22,34 @@ class ProductDescriptionController @Inject()(cc: MessagesControllerComponents, p
       "description" -> text,
     )(ProductDescriptionCreateForm.apply)(ProductDescriptionCreateForm.unapply)
   }
+
+  def addProductQuestionForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val products = productRepository.list()
+    products map {p =>
+      Ok(views.html.productdescriptionadd(productDescriptionCreateForm, p))
+    }
+  }
+
+  def addProductQuestionHandle = Action.async { implicit  request =>
+    var prod:Seq[Product] = Seq[Product]()
+    productRepository.list().onComplete{
+      case Success(value) => prod = value
+      case Failure(_) => print("fail")
+    }
+    productDescriptionCreateForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.productdescriptionadd(errorForm, prod))
+        )
+      },
+      productDescription => {
+        productDescriptionRepository.create(1, productDescription.product, productDescription.description).map { _ =>
+          Ok("Ok")
+        }
+      }
+    )
+  }
+
 
   def readAll: Action[AnyContent] = Action.async {
     val result = productDescriptionRepository.list()
