@@ -73,7 +73,8 @@ PUT     /promos                   controllers.PromoController.update
 POST    /promos                   controllers.PromoController.add
 DELETE  /promos/:id               controllers.PromoController.delete(id: Long)
 ## Promo forms
-#GET     /addPromoForm             controllers.PromoController.addPromoForm
+GET     /addPromoForm             controllers.PromoController.addPromoForm
+POST    /addPromohandle           controllers.PromoController.addPromoHandle
 
 ## Users
 POST /login                       controllers.UserController.login

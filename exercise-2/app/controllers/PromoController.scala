@@ -7,7 +7,7 @@ import javax.inject.Inject
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
 import play.api.libs.json._
 import javax.inject._
-import models.{Promo, PromoRepository}
+import models.{ProductRepository, Promo, PromoRepository, Product}
 import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.data.Forms.mapping
@@ -16,10 +16,11 @@ import play.api.data.Forms._
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration.Duration
+import scala.util.{Failure, Success}
 
 
 @Singleton
-class PromoController @Inject()(cc: MessagesControllerComponents, promoRepository: PromoRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+class PromoController @Inject()(cc: MessagesControllerComponents, promoRepository: PromoRepository, productRepository: ProductRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   val promoFormCreate: Form[CreatePromoForm] = Form {
     mapping(
@@ -28,13 +29,34 @@ class PromoController @Inject()(cc: MessagesControllerComponents, promoRepositor
     )(CreatePromoForm.apply)(CreatePromoForm.unapply)
   }
 
-//  def addPromoForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-//    val payments = paymentRepository.list()
-//    val baskets = Await.result(basketRepository.list(), Duration(10, TimeUnit.SECONDS));
-//    payments map {p =>
-//      Ok(views.html.orderadd(orderFormCreate, baskets, p))
-//    }
-//  }
+  def addPromoForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val products = productRepository.list()
+    products map {p =>
+      Ok(views.html.promoadd(promoFormCreate, p))
+    }
+  }
+
+  def addPromoHandle = Action.async { implicit  request =>
+    var prod:Seq[Product] = Seq[Product]()
+    productRepository.list().onComplete{
+      case Success(value) => prod = value
+      case Failure(_) => print("fail")
+    }
+    promoFormCreate.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.promoadd(errorForm, prod))
+        )
+      },
+      promo => {
+        promoRepository.create(1, promo.product, promo.looseAmount).map { _ =>
+          Ok("Ok")
+        }
+      }
+    )
+  }
+
+
 
   def get(id: Long) = Action.async {
     val result = promoRepository.getById(id)
