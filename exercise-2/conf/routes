@@ -32,6 +32,9 @@ GET     /basketItems/:id            controllers.BasketItemsController.get(id: Lo
 GET     /basketItems/basket/:basket_id controllers.BasketItemsController.getByBasketId(basket_id: Long)
 POST    /basketItems                controllers.BasketItemsController.add
 DELETE  /basketItems/:id            controllers.BasketItemsController.delete(id: Long)
+## BasketItems Forms
+GET     /basketItemForm             controllers.BasketItemsController.basketItemForm
+POST    /basketItemAddHandler       controllers.BasketItemsController.basketItemAddHandle
 
 
 ## Basket

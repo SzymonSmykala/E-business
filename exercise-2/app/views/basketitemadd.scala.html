@@ -1,0 +1,36 @@
+@import controllers.routes
+@import views.html.helper.form
+@import controllers.CreateBasketItemForm
+@import play.api.data.Form
+@import models.Basket
+@import play.api.mvc.MessagesRequestHeader
+@import play.api.mvc.Flash
+@import views.html.helper
+@import views.html.helper.inputText
+@(basketItem: Form[CreateBasketItemForm], product: Seq[Product], basket: Seq[Basket] )(implicit request: MessagesRequestHeader, flash: Flash)
+
+
+@flash.get("success").getOrElse("")
+
+@form(routes.BasketItemsController.basketItemAddHandle()) {
+    @helper.CSRF.formField
+    Product
+    <select name="product" id="product">
+    @for(p <- product){
+        <option value="@p.id">@p.name</option>
+    }
+    </select>
+
+    BasketId:
+    <select name="basket" id="basket">
+    @for(p <- basket){
+        <option value="@p.id">@p.id</option>
+    }
+    </select>
+    count
+    @inputText(basketItem("count"))
+    <div class="buttons">
+        <input type="submit" value="Add Basket Item"/>
+    </div>
+}
+
