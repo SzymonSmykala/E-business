@@ -1,21 +1,13 @@
 package controllers
 
-import java.util.Date
-import java.util.concurrent.TimeUnit
-
-import javax.inject.Inject
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
-import play.api.libs.json._
-import javax.inject._
-import models.{ProductRepository, Promo, PromoRepository, Product}
-import org.joda.time.DateTime
+import javax.inject.{Inject, _}
+import models.{Product, ProductRepository, Promo, PromoRepository}
 import play.api.data.Form
-import play.api.data.Forms.mapping
-import play.api.data.Forms._
+import play.api.data.Forms.{mapping, _}
+import play.api.libs.json._
+import play.api.mvc._
 
-import scala.collection.mutable.ListBuffer
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.concurrent.duration.Duration
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 
@@ -55,8 +47,6 @@ class PromoController @Inject()(cc: MessagesControllerComponents, promoRepositor
       }
     )
   }
-
-
 
   def get(id: Long) = Action.async {
     val result = promoRepository.getById(id)

@@ -1,18 +1,25 @@
 package controllers
 
-import javax.inject.Inject
-import play.api.mvc.{AbstractController, ControllerComponents}
+import javax.inject.{Inject, _}
+import models.{FavoriteItem, FavoriteItemsRepository, ProductRepository, UserRepository}
+import play.api.data.Form
+import play.api.data.Forms.mapping
 import play.api.libs.json._
-import javax.inject._
-import models.{FavoriteItem, FavoriteItemsRepository}
+import play.api.data.Forms._
+import play.api.mvc.{MessagesAbstractController, MessagesControllerComponents}
 
-import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
 
 
 @Singleton
-class FavoriteItemsController @Inject()(cc: ControllerComponents, favoriteItemsRepository: FavoriteItemsRepository) (implicit ec: ExecutionContext) extends AbstractController(cc) {
+class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favoriteItemsRepository: FavoriteItemsRepository, userRepository: UserRepository, productRepository: ProductRepository) (implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
+  val productForm: Form[FavoriteItemCreateForm] = Form {
+    mapping(
+      "user" -> number,
+      "product" -> number,
+    )(FavoriteItemCreateForm.apply)(FavoriteItemCreateForm.unapply)
+  }
 
   def readAll = Action.async {
     val result = favoriteItemsRepository.list()
@@ -51,3 +58,5 @@ class FavoriteItemsController @Inject()(cc: ControllerComponents, favoriteItemsR
     }
   }
 }
+
+case class FavoriteItemCreateForm(var user: Int, var product: Int)

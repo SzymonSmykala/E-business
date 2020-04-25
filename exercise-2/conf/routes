@@ -86,6 +86,8 @@ GET     /favoriteItems/:id               controllers.FavoriteItemsController.get
 GET     /favoriteItems/user/:user_id     controllers.FavoriteItemsController.getByUserId(user_id: Long)
 POST    /favoriteItems                   controllers.FavoriteItemsController.add
 DELETE  /favoriteItems/:id               controllers.FavoriteItemsController.delete(id: Long)
+## Favorites items forms
+
 
 ## Product questions
 GET     /productQuestions                   controllers.ProductQuestionsController.readAll
