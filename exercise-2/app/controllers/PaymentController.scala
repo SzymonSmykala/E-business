@@ -1,17 +1,48 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesRequest}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
 import play.api.libs.json._
 import javax.inject._
 import models.{Payment, PaymentRepository}
+import play.api.data.Form
+import play.api.data.Forms.mapping
+import play.api.data.Form
+import play.api.data.Forms._
+
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class PaymentController @Inject()(cc: ControllerComponents, paymentRepository: PaymentRepository)(implicit ec: ExecutionContext)  extends AbstractController(cc) {
+class PaymentController @Inject()(cc: MessagesControllerComponents, paymentRepository: PaymentRepository)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
 
+  val paymentForm: Form[CreatePaymentForm] = Form {
+    mapping(
+      "status" -> nonEmptyText,
+    )(CreatePaymentForm.apply)(CreatePaymentForm.unapply)
+  }
+
+  def addPaymentForm: Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.addpayment(paymentForm))
+  }
+
+  def addPaymentHandle = Action.async { implicit request =>
+
+    paymentForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.addpayment(errorForm))
+        )
+      },
+      payment => {
+        paymentRepository.create(1, payment.status).map { _ =>
+          Ok("Ok")
+        }
+      }
+    )
+
+  }
 
   def get(id: Long) = Action.async {
     val result = paymentRepository.getById(id)
@@ -50,3 +81,5 @@ class PaymentController @Inject()(cc: ControllerComponents, paymentRepository: P
   }
 
 }
+
+case class CreatePaymentForm(var status: String)

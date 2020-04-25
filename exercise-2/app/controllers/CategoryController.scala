@@ -5,13 +5,11 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import play.api.libs.json._
 import javax.inject._
 import models.{Category, CategoryRepository}
-import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.data.Form
 import play.api.data.Forms._
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
 
 
 @Singleton
