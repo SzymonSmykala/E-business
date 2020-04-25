@@ -96,6 +96,8 @@ GET     /productQuestions/:id               controllers.ProductQuestionsControll
 PUT     /productQuestions                   controllers.ProductQuestionsController.update
 POST    /productQuestions                   controllers.ProductQuestionsController.add
 DELETE  /productQuestions/:id               controllers.ProductQuestionsController.delete(id: Long)
+## ProductQuestion Forms
+GET     /productQuestionForm                 controllers.ProductQuestionsController.addProductQuestionForm
 
 ## Product description
 GET     /productDescriptions                   controllers.ProductDescriptionController.readAll

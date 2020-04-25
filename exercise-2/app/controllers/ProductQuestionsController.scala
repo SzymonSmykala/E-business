@@ -1,17 +1,23 @@
 package controllers
 
-import javax.inject.Inject
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
-import play.api.libs.json._
-import javax.inject._
+import javax.inject.{Inject, _}
 import models.{ProductQuestion, ProductQuestionRepository}
+import play.api.data.Form
+import play.api.data.Forms.{mapping, _}
+import play.api.libs.json._
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
-import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
-
 
 @Singleton
 class ProductQuestionsController @Inject()(cc: ControllerComponents, productQuestionRepository: ProductQuestionRepository) (implicit ec: ExecutionContext)extends AbstractController(cc) {
+
+  val productQuestionCreateForm: Form[ProductQuestionCreateForm] = Form {
+    mapping(
+      "product" -> number,
+      "question" -> nonEmptyText,
+    )(ProductQuestionCreateForm.apply)(ProductQuestionCreateForm.unapply)
+  }
 
   def readAll: Action[AnyContent] = Action.async {
     val result = productQuestionRepository.list()
@@ -48,3 +54,6 @@ class ProductQuestionsController @Inject()(cc: ControllerComponents, productQues
     }
   }
 }
+
+
+case class ProductQuestionCreateForm(var product: Int, var questionContent: String)

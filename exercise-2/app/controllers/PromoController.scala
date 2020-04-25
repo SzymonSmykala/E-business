@@ -14,7 +14,7 @@ import scala.util.{Failure, Success}
 @Singleton
 class PromoController @Inject()(cc: MessagesControllerComponents, promoRepository: PromoRepository, productRepository: ProductRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
-  val promoFormCreate: Form[CreatePromoForm] = Form {
+  val promoCreateForm: Form[CreatePromoForm] = Form {
     mapping(
       "product" -> number,
       "promoAmount" ->number,
@@ -24,7 +24,7 @@ class PromoController @Inject()(cc: MessagesControllerComponents, promoRepositor
   def addPromoForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val products = productRepository.list()
     products map {p =>
-      Ok(views.html.promoadd(promoFormCreate, p))
+      Ok(views.html.promoadd(promoCreateForm, p))
     }
   }
 
@@ -34,7 +34,7 @@ class PromoController @Inject()(cc: MessagesControllerComponents, promoRepositor
       case Success(value) => prod = value
       case Failure(_) => print("fail")
     }
-    promoFormCreate.bindFromRequest.fold(
+    promoCreateForm.bindFromRequest.fold(
       errorForm => {
         Future.successful(
           BadRequest(views.html.promoadd(errorForm, prod))
