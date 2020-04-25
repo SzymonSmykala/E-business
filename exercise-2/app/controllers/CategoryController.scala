@@ -1,16 +1,48 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesRequest}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest, Request}
 import play.api.libs.json._
 import javax.inject._
 import models.{Category, CategoryRepository}
+import play.api.data.Forms.mapping
+import play.api.data.Form
+import play.api.data.Forms._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class CategoryController @Inject()(cc: ControllerComponents)(implicit ec: ExecutionContext, categoryRepository: CategoryRepository)  extends AbstractController(cc) {
+class CategoryController @Inject()(cc: MessagesControllerComponents)(implicit ec: ExecutionContext, categoryRepository: CategoryRepository)  extends MessagesAbstractController(cc)  {
+
+  val categoryForm: Form[CreateCategoryForm] = Form {
+    mapping(
+      "name" -> nonEmptyText,
+    )(CreateCategoryForm.apply)(CreateCategoryForm.unapply)
+  }
+
+
+  def addCategoryForm: Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.addcategory(categoryForm))
+  }
+
+
+  def addCategoryFormHandler = Action.async { implicit request =>
+
+    categoryForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.addcategory(errorForm))
+        )
+      },
+      product => {
+        categoryRepository.create(1, product.name).map { _ =>
+          Ok("Ok")
+        }
+      }
+    )
+
+  }
 
   def get(id: Long) = Action.async {
     val result = categoryRepository.getById(id)
@@ -49,3 +81,6 @@ class CategoryController @Inject()(cc: ControllerComponents)(implicit ec: Execut
   }
 
 }
+
+
+case class CreateCategoryForm(name: String)

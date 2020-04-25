@@ -34,4 +34,8 @@ class UserRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implic
   def getByEmail(email: String ) : Future[User] = db.run{
     user.filter(_.email === email).result.head
   }
+
+  def list() : Future[Seq[User]] = db.run{
+    user.result
+  }
 }

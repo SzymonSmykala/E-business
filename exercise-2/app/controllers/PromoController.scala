@@ -1,46 +1,88 @@
 package controllers
 
-import java.util.Date
-
-import javax.inject.Inject
-import play.api.mvc.{AbstractController, ControllerComponents}
+import javax.inject.{Inject, _}
+import models.{Product, ProductRepository, Promo, PromoRepository}
+import play.api.data.Form
+import play.api.data.Forms.{mapping, _}
 import play.api.libs.json._
-import javax.inject._
-import models.Promo
-import org.joda.time.DateTime
+import play.api.mvc._
 
-import scala.collection.mutable.ListBuffer
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 
 @Singleton
-class PromoController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class PromoController @Inject()(cc: MessagesControllerComponents, promoRepository: PromoRepository, productRepository: ProductRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
-  def readAll = Action {
-    var result: ListBuffer[Promo] = ListBuffer();
-
-    Ok(Json.toJson(result.toList))
+  val promoCreateForm: Form[CreatePromoForm] = Form {
+    mapping(
+      "product" -> number,
+      "promoAmount" ->number,
+    )(CreatePromoForm.apply)(CreatePromoForm.unapply)
   }
 
-  def get(id: Long) = Action {
-
-    Ok(Json.toJson("empty"));
+  def addPromoForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val products = productRepository.list()
+    products map {p =>
+      Ok(views.html.promoadd(promoCreateForm, p))
+    }
   }
 
-  def update() = Action { request =>
+  def addPromoHandle = Action.async { implicit  request =>
+    var prod:Seq[Product] = Seq[Product]()
+    productRepository.list().onComplete{
+      case Success(value) => prod = value
+      case Failure(_) => print("fail")
+    }
+    promoCreateForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.promoadd(errorForm, prod))
+        )
+      },
+      promo => {
+        promoRepository.create(1, promo.product, promo.looseAmount).map { _ =>
+          Ok("Ok")
+        }
+      }
+    )
+  }
+
+  def get(id: Long) = Action.async {
+    val result = promoRepository.getById(id)
+    result map {r =>
+      Ok(Json.toJson(r));
+    }
+  }
+
+  def update() = Action.async { request =>
     val json = request.body.asJson.get
-    val product = json.as[Promo]
-    print(product)
-    Ok(Json.toJson(product))
+    val payment = json.as[Promo]
+    val updateResult = promoRepository.update(payment.id, payment)
+    updateResult map {r => Ok(Json.toJson(payment))}
   }
 
-  def add() = Action { request =>
+  def add() = Action.async { request =>
     val json = request.body.asJson.get
-    val product = json.as[Promo]
-    print(product)
-    Ok(Json.toJson(product))
+    val promo = json.as[Promo]
+    val inserted : Future[Promo] = promoRepository.create(promo.id, promo.productId, promo.looseAmount)
+    inserted map {
+      i =>
+        Ok(Json.toJson(i))
+    }
   }
 
-  def delete(id: Long) = Action{
-    Ok(Json.toJson("completed"))
+  def readAll = Action.async { request =>
+    val result = promoRepository.list()
+    result.map(prod => Ok(Json.toJson(prod)))
+  }
+
+  def delete(id: Long) = Action.async{
+    val deleteResult = promoRepository.delete(id)
+    deleteResult map {
+      r => Ok(Json.toJson(r))
+    }
   }
 }
+
+case class CreatePromoForm(var product: Int, var looseAmount: Int)

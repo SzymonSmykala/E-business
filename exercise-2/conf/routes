@@ -12,6 +12,9 @@ GET     /products/:id               controllers.ProductController.get(id: Long)
 PUT     /products                   controllers.ProductController.update
 POST    /products                   controllers.ProductController.add
 DELETE  /products/:id               controllers.ProductController.delete(id: Long)
+## Product forms
+GET     /addProductForm             controllers.ProductController.addProduct
+POST    /addProductFormHandler      controllers.ProductController.addProductHandle
 
 ## Category
 GET     /category                   controllers.CategoryController.readAll
@@ -19,6 +22,9 @@ GET     /category/:id               controllers.CategoryController.get(id: Long)
 PUT     /category                   controllers.CategoryController.update
 POST    /category                   controllers.CategoryController.add
 DELETE  /category/:id               controllers.CategoryController.delete(id: Long)
+## Category Forms
+GET     /categoryAddForm            controllers.CategoryController.addCategoryForm
+POST    /categoryHandler            controllers.CategoryController.addCategoryFormHandler
 
 ## BasketItems
 GET     /basketItems                controllers.BasketItemsController.readAll
@@ -26,6 +32,10 @@ GET     /basketItems/:id            controllers.BasketItemsController.get(id: Lo
 GET     /basketItems/basket/:basket_id controllers.BasketItemsController.getByBasketId(basket_id: Long)
 POST    /basketItems                controllers.BasketItemsController.add
 DELETE  /basketItems/:id            controllers.BasketItemsController.delete(id: Long)
+## BasketItems Forms
+GET     /basketItemForm             controllers.BasketItemsController.basketItemForm
+POST    /basketItemAddHandler       controllers.BasketItemsController.basketItemAddHandle
+
 
 ## Basket
 GET     /basket                   controllers.BasketController.readAll
@@ -33,6 +43,9 @@ GET     /basket/:id               controllers.BasketController.get(id: Long)
 GET     /basket/user/:user_id     controllers.BasketController.getByUserId(user_id: Long)
 POST    /basket                   controllers.BasketController.add
 DELETE  /basket/:id               controllers.BasketController.delete(id: Long)
+## Basket Forms
+GET     /basketAddForm            controllers.BasketController.addBasketForm
+POST    /basketHandler            controllers.BasketController.addBasketHandle
 
 ## Order
 GET     /orders                   controllers.OrderController.readAll
@@ -40,12 +53,18 @@ GET     /orders/:id               controllers.OrderController.get(id: Long)
 PUT     /orders                   controllers.OrderController.update
 POST    /orders                   controllers.OrderController.add
 DELETE  /orders/:id               controllers.OrderController.delete(id: Long)
+## OrderForms
+GET     /orderFormAdd             controllers.OrderController.addOrderForm
+POST    /orderAddHandler          controllers.OrderController.addOrderHandler
 
 ## Payments
 GET     /payments                   controllers.PaymentController.readAll
 GET     /payments/:id               controllers.PaymentController.get(id: Long)
 PUT     /payments                   controllers.PaymentController.update
 POST    /payments                   controllers.PaymentController.add
+## Payments Forms
+GET     /addPaymentForm             controllers.PaymentController.addPaymentForm
+POST    /addPaymentHandler          controllers.PaymentController.addPaymentHandle
 
 ## Promo
 GET     /promos                   controllers.PromoController.readAll
@@ -53,6 +72,9 @@ GET     /promos/:id               controllers.PromoController.get(id: Long)
 PUT     /promos                   controllers.PromoController.update
 POST    /promos                   controllers.PromoController.add
 DELETE  /promos/:id               controllers.PromoController.delete(id: Long)
+## Promo forms
+GET     /addPromoForm             controllers.PromoController.addPromoForm
+POST    /addPromohandle           controllers.PromoController.addPromoHandle
 
 ## Users
 POST /login                       controllers.UserController.login
@@ -64,6 +86,9 @@ GET     /favoriteItems/:id               controllers.FavoriteItemsController.get
 GET     /favoriteItems/user/:user_id     controllers.FavoriteItemsController.getByUserId(user_id: Long)
 POST    /favoriteItems                   controllers.FavoriteItemsController.add
 DELETE  /favoriteItems/:id               controllers.FavoriteItemsController.delete(id: Long)
+## Favorites items forms
+GET     /favoriteItemForm                controllers.FavoriteItemsController.addFavoriteItemForm
+POST    /favoriteItemHandle              controllers.FavoriteItemsController.addFavoriteItemHandle
 
 ## Product questions
 GET     /productQuestions                   controllers.ProductQuestionsController.readAll
@@ -71,6 +96,9 @@ GET     /productQuestions/:id               controllers.ProductQuestionsControll
 PUT     /productQuestions                   controllers.ProductQuestionsController.update
 POST    /productQuestions                   controllers.ProductQuestionsController.add
 DELETE  /productQuestions/:id               controllers.ProductQuestionsController.delete(id: Long)
+## ProductQuestion Forms
+GET     /productQuestionForm                controllers.ProductQuestionsController.addProductQuestionForm
+POST    /productQuestionHandle                 controllers.ProductQuestionsController.addProductQuestionHandle
 
 ## Product description
 GET     /productDescriptions                   controllers.ProductDescriptionController.readAll
@@ -78,3 +106,6 @@ GET     /productDescriptions/:id               controllers.ProductDescriptionCon
 PUT     /productDescriptions                   controllers.ProductDescriptionController.update
 POST    /productDescriptions                   controllers.ProductDescriptionController.add
 DELETE  /productDescriptions/:id               controllers.ProductDescriptionController.delete(id: Long)
+## Product description forms
+GET     /productDescriptionForm             controllers.ProductDescriptionController.addProductQuestionForm
+POST    /productDescritionHandle            controllers.ProductDescriptionController.addProductQuestionHandle
