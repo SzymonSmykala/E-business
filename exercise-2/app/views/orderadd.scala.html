@@ -1,0 +1,26 @@
+@(product: Form[CreateOrderForm], basket: Seq[Basket], payment: Seq[Payment])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(routes.OrderController.addOrderHandler()) {
+    @helper.CSRF.formField
+
+    <select name="basket" id="basket">
+    @for(b <- basket){
+        <option value="@b.id">@b.id</option>
+    }
+    </select>
+
+    <select name="payment" id="payment">
+    @for(b <- payment){
+        <option value="@b.id">@b.id - @b.status</option>
+    }
+    </select>
+
+    <div class="buttons">
+        <input type="submit" value="Add Product"/>
+    </div>
+}
+

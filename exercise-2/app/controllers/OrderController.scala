@@ -1,19 +1,65 @@
 package controllers
 
+import java.util.concurrent.TimeUnit
+
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
 import play.api.libs.json._
 import javax.inject._
-import models.{Order, OrderRepository}
+import models.{Basket, BasketRepository, Order, OrderRepository, Payment, PaymentRepository, Product}
+import play.api.data.Form
+import play.api.data.Forms.mapping
+import play.api.data.Forms._
 
-import scala.collection.mutable.ListBuffer
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 
 @Singleton
-class OrderController @Inject()(cc: ControllerComponents, orderRepository: OrderRepository) (implicit ec: ExecutionContext)extends AbstractController(cc) {
+class OrderController @Inject()(cc: MessagesControllerComponents, orderRepository: OrderRepository, basketRepository: BasketRepository, paymentRepository: PaymentRepository)(implicit ec: ExecutionContext)extends MessagesAbstractController(cc) {
 
+  val orderFormCreate: Form[CreateOrderForm] = Form {
+    mapping(
+      "basket" -> number,
+      "payment" ->number,
+    )(CreateOrderForm.apply)(CreateOrderForm.unapply)
+  }
 
+  def addOrderForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val payments = paymentRepository.list()
+    val baskets = Await.result(basketRepository.list(), Duration(10, TimeUnit.SECONDS));
+    payments map {p =>
+      Ok(views.html.orderadd(orderFormCreate, baskets, p))
+    }
+  }
+
+  def addOrderHandler = Action.async { implicit  request =>
+    var pay:Seq[Payment] = Seq[Payment]()
+    paymentRepository.list().onComplete{
+      case Success(value) => pay = value
+      case Failure(_) => print("fail")
+    }
+
+    var bask:Seq[Basket] = Seq[Basket]()
+    basketRepository.list().onComplete{
+      case Success(value) => bask = value
+      case Failure(_) => print("fail")
+    }
+
+    orderFormCreate.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.orderadd(errorForm, bask, pay))
+        )
+      },
+      order => {
+        orderRepository.create(1, order.basket, order.payment).map { _ =>
+          Ok("Ok")
+        }
+      }
+    )
+  }
 
   def get(id: Long) = Action.async {
     val result = orderRepository.getById(id)
@@ -24,9 +70,9 @@ class OrderController @Inject()(cc: ControllerComponents, orderRepository: Order
 
   def update() = Action.async { request =>
     val json = request.body.asJson.get
-    val payment = json.as[Order]
-    val updateResult = orderRepository.update(payment.id, payment)
-    updateResult map {r => Ok(Json.toJson(payment))}
+    val order = json.as[Order]
+    val updateResult = orderRepository.update(order.id, order)
+    updateResult map {r => Ok(Json.toJson(order))}
   }
 
   def add() = Action.async { request =>
@@ -52,3 +98,6 @@ class OrderController @Inject()(cc: ControllerComponents, orderRepository: Order
   }
 
 }
+
+
+case class CreateOrderForm(var basket: Int, var payment: Int)

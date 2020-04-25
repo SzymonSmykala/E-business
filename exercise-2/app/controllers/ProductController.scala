@@ -1,17 +1,14 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
+import play.api.mvc.{Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
 import play.api.libs.json._
 import javax.inject._
 import models.{Category, CategoryRepository, Product, ProductRepository}
-import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.data.Form
 import play.api.data.Forms._
 
-import scala.collection.mutable.ListBuffer
-import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
