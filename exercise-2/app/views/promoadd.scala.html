@@ -1,4 +1,4 @@
-@(basket: Form[CreatePromoForm], product: Seq[Product])(implicit request: MessagesRequestHeader, flash: Flash)
+@(promo: Form[CreatePromoForm], product: Seq[Product])(implicit request: MessagesRequestHeader, flash: Flash)
 
 @import helper._
 
@@ -13,10 +13,9 @@
     }
     </select>
 
-    @inputText(basket("promoAmount"))
+    @inputText(promo("promoAmount"))
 
     <div class="buttons">
         <input type="submit" value="Add Promo"/>
     </div>
 }
-
