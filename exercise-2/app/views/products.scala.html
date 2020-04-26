@@ -3,7 +3,7 @@
 @for(product <- products) {
     <b>@product.name</b>
     @product.categoryId
-@*   <a href="@controllers.routes.ProductController.updateProduct(product.id)">Edit</a>*@
+    <a href="@controllers.routes.ProductController.updateProduct(product.id)">Edit</a>
     <a href="@controllers.routes.ProductController.deleteProduct(product.id)">Delete</a>
     <br>
 }

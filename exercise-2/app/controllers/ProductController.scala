@@ -22,6 +22,14 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
       "category" -> number,
     )(CreateProductForm.apply)(CreateProductForm.unapply)
   }
+  val productFormUpdate: Form[UpdateProductForm] = Form {
+    mapping(
+      "id" -> number,
+      "name" -> nonEmptyText,
+      "category" -> number,
+    )(UpdateProductForm.apply)(UpdateProductForm.unapply)
+  }
+
 
   def addProduct: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val categories = categoryRepo.list()
@@ -37,6 +45,42 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
       productsRepository.delete(id)
       Redirect(routes.ProductController.getProducts())
   }
+
+  def updateProduct(id: Long): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    var categories:Seq[Category] = Seq[Category]()
+    categoryRepo.list().onComplete{
+      case Success(cat) => categories = cat
+      case Failure(_) => print("fail")
+    }
+    val produkt = productsRepository.getById(id)
+    produkt.map(product => {
+      val prodForm = productFormUpdate.fill(UpdateProductForm(product.id.toInt, product.name,product.categoryId.toInt))
+      Ok(views.html.productupdate(prodForm, categories))
+    })
+  }
+
+  def updateProductHandle(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    var categ:Seq[Category] = Seq[Category]()
+    categoryRepo.list().onComplete{
+      case Success(cat) => categ = cat
+      case Failure(_) => print("fail")
+    }
+
+    productFormUpdate.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.productupdate(errorForm, categ))
+        )
+      },
+      product => {
+        productsRepository.update(product.id, Product(product.name, product.category, product.id)).map { _ =>
+          Redirect(routes.ProductController.updateProduct(product.id)).flashing("success" -> "product updated")
+        }
+      }
+    )
+
+  }
+
 
   def addProductHandle = Action.async { implicit request =>
     var categ:Seq[Category] = Seq[Category]()
@@ -97,5 +141,5 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
     }
   }
 }
-
 case class CreateProductForm(var name: String, var category: Int)
+case class UpdateProductForm(var id: Int, var name: String, var category: Int)

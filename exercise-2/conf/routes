@@ -16,7 +16,9 @@ DELETE  /products/:id               controllers.ProductController.delete(id: Lon
 GET     /addProductForm             controllers.ProductController.addProduct
 POST    /addProductFormHandler      controllers.ProductController.addProductHandle
 GET     /productsForm               controllers.ProductController.getProducts
-GET    /deteleProduct/:id          controllers.ProductController.deleteProduct(id: Long)
+GET     /deteleProduct/:id          controllers.ProductController.deleteProduct(id: Long)
+GET     /updateProduct/:id          controllers.ProductController.updateProduct(id: Long)
+POST    /updateProductHandle        controllers.ProductController.updateProductHandle
 
 ## Category
 GET     /category                   controllers.CategoryController.readAll
