@@ -20,6 +20,7 @@ class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favori
 
   val favoriteItemUpdateForm: Form[FavoriteItemUpdateForm] = Form {
     mapping(
+      "id" -> number,
       "user" -> number,
       "product" -> number,
     )(FavoriteItemUpdateForm.apply)(FavoriteItemUpdateForm.unapply)

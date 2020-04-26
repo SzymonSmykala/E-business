@@ -19,6 +19,7 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
 
   val basketFormUpdate: Form[UpdateBasketForm] = Form {
     mapping(
+      "id" -> number,
       "user" -> number
     )(UpdateBasketForm.apply)(UpdateBasketForm.unapply)
   }
