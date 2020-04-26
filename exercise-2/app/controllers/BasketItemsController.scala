@@ -19,6 +19,15 @@ import scala.util.{Failure, Success}
 @Singleton
 class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketItemRepository: BasketItemRepository, productRepository: ProductRepository, basketRepository: BasketRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
+  val basketItemFormUpdate: Form[UpdateBasketItemForm] = Form {
+    mapping(
+      "id" -> number,
+      "product" -> number,
+      "count" ->number,
+      "basket" -> number,
+    )(UpdateBasketItemForm.apply)(UpdateBasketItemForm.unapply)
+  }
+
   val basketItemFormCreate: Form[CreateBasketItemForm] = Form {
     mapping(
       "product" -> number,

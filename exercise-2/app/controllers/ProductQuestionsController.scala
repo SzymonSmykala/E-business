@@ -16,6 +16,7 @@ class ProductQuestionsController @Inject()(cc: MessagesControllerComponents, pro
 
   val productQuestionUpdateForm: Form[ProductQuestionUpdateForm] = Form {
     mapping(
+            "id"  -> number,
       "product" -> number,
       "question" -> nonEmptyText,
     )(ProductQuestionUpdateForm.apply)(ProductQuestionUpdateForm.unapply)

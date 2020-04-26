@@ -18,6 +18,13 @@ import scala.util.{Failure, Success}
 @Singleton
 class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favoriteItemsRepository: FavoriteItemsRepository, userRepository: UserRepository, productRepository: ProductRepository) (implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
+  val favoriteItemUpdateForm: Form[FavoriteItemUpdateForm] = Form {
+    mapping(
+      "user" -> number,
+      "product" -> number,
+    )(FavoriteItemUpdateForm.apply)(FavoriteItemUpdateForm.unapply)
+  }
+
   val favoriteItemForm: Form[FavoriteItemCreateForm] = Form {
     mapping(
       "user" -> number,
