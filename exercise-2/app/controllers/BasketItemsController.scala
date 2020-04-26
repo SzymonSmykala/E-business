@@ -6,7 +6,7 @@ import javax.inject.Inject
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
 import play.api.libs.json._
 import javax.inject._
-import models.{Basket, BasketItem, BasketItemRepository, BasketRepository, ProductRepository, Product}
+import models.{Basket, BasketItem, BasketItemRepository, BasketRepository, Category, Product, ProductRepository}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.Forms.mapping
@@ -66,6 +66,36 @@ class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketIt
       basketItem => {
         basketItemRepository.create(1, basketItem.product, basketItem.count, basketItem.basket).map { _ =>
          Ok("Ok")
+        }
+      }
+    )
+
+  }
+
+
+  def updateBasketItemHandle(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    var baskets:Seq[Basket] = Seq[Basket]()
+    basketRepository.list().onComplete{
+      case Success(cat) => baskets = cat
+      case Failure(_) => print("fail")
+    }
+
+    var products: Seq[User] = Seq[Product]()
+    productRepository.list().onComplete{
+      case Success(p) => products = p
+      case Failure(_) => print("fail")
+    }
+
+
+    basketItemFormUpdate.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.basketitemupdate(errorForm, categ))
+        )
+      },
+      product => {
+        productsRepository.update(product.id, Product(product.name, product.category, product.id)).map { _ =>
+          Redirect(routes.ProductController.updateProduct(product.id)).flashing("success" -> "product updated")
         }
       }
     )
