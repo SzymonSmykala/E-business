@@ -16,6 +16,14 @@ import scala.util.{Failure, Success}
 @Singleton
 class ProductDescriptionController @Inject()(cc: MessagesControllerComponents, productDescriptionRepository: ProductDescriptionRepository, productRepository: ProductRepository)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
 
+  val productDescriptionUpdateForm: Form[ProductDescriptionUpdateForm] = Form {
+    mapping(
+      "id" -> number,
+      "product" -> number,
+      "description" -> text,
+    )(ProductDescriptionUpdateForm.apply)(ProductDescriptionUpdateForm.unapply)
+  }
+
   val productDescriptionCreateForm: Form[ProductDescriptionCreateForm] = Form {
     mapping(
       "product" -> number,

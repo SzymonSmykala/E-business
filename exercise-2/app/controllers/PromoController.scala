@@ -14,6 +14,14 @@ import scala.util.{Failure, Success}
 @Singleton
 class PromoController @Inject()(cc: MessagesControllerComponents, promoRepository: PromoRepository, productRepository: ProductRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
+  val promoUpdateForm: Form[UpdatePromoForm] = Form {
+    mapping(
+      "id" -> number,
+      "product" -> number,
+      "promoAmount" ->number,
+    )(UpdatePromoForm.apply)(UpdatePromoForm.unapply)
+  }
+
   val promoCreateForm: Form[CreatePromoForm] = Form {
     mapping(
       "product" -> number,
