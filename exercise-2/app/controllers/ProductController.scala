@@ -81,7 +81,6 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
 
   }
 
-
   def addProductHandle = Action.async { implicit request =>
     var categ:Seq[Category] = Seq[Category]()
     val categories = categoryRepo.list().onComplete{

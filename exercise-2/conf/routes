@@ -29,6 +29,10 @@ DELETE  /category/:id               controllers.CategoryController.delete(id: Lo
 ## Category Forms
 GET     /categoryAddForm            controllers.CategoryController.addCategoryForm
 POST    /categoryHandler            controllers.CategoryController.addCategoryFormHandler
+GET     /updateCategoryForm/:id     controllers.CategoryController.updateCategory(id: Long)
+POST    /updateCategoryHandle       controllers.CategoryController.updateCategoryHandle
+GET     /categoryForm               controllers.CategoryController.getCategories
+GET     /deleteCategory/:id         controllers.CategoryController.deleteCategory(id: Long)
 
 ## BasketItems
 GET     /basketItems                controllers.BasketItemsController.readAll
