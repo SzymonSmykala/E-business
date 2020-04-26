@@ -86,5 +86,5 @@ class ProductDescriptionController @Inject()(cc: MessagesControllerComponents, p
     }
   }
 }
-
+case class ProductDescriptionUpdateForm(var id: Int, var product: Int, var description: String)
 case class ProductDescriptionCreateForm(var product: Int, var description: String)

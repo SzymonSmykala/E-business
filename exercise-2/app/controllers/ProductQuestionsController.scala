@@ -83,5 +83,5 @@ class ProductQuestionsController @Inject()(cc: MessagesControllerComponents, pro
   }
 }
 
-
+case class ProductQuestionUpdateForm(var id: Int, var product: Int, var questionContent: String)
 case class ProductQuestionCreateForm(var product: Int, var questionContent: String)

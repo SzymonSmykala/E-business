@@ -99,5 +99,5 @@ class OrderController @Inject()(cc: MessagesControllerComponents, orderRepositor
 
 }
 
-
+case class UpdateOrderForm(var id: Int, var basket: Int, var payment: Int)
 case class CreateOrderForm(var basket: Int, var payment: Int)

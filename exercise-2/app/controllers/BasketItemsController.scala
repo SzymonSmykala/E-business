@@ -100,5 +100,5 @@ class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketIt
     }
   }
 }
-
+case class UpdateBasketItemForm(var id: Int, var product: Int, var count: Int, var basket: Int)
 case class CreateBasketItemForm(var product: Int, var count: Int, var basket: Int)

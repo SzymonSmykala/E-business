@@ -87,5 +87,5 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
   }
 
 }
-
+case class UpdateBasketForm(var id: Int, var user: Int)
 case class CreateBasketForm(var user: Int)

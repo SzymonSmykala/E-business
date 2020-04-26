@@ -84,5 +84,5 @@ class PromoController @Inject()(cc: MessagesControllerComponents, promoRepositor
     }
   }
 }
-
+case class UpdatePromoForm(var id: Int, var product: Int, var looseAmount: Int)
 case class CreatePromoForm(var product: Int, var looseAmount: Int)

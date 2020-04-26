@@ -98,4 +98,5 @@ class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favori
   }
 }
 
+case class FavoriteItemUpdateForm(var id: Int, var user: Int, var product: Int)
 case class FavoriteItemCreateForm(var user: Int, var product: Int)
