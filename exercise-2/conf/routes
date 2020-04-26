@@ -83,6 +83,10 @@ DELETE  /promos/:id               controllers.PromoController.delete(id: Long)
 ## Promo forms
 GET     /addPromoForm             controllers.PromoController.addPromoForm
 POST    /addPromohandle           controllers.PromoController.addPromoHandle
+GET     /updatePromoForm/:id          controllers.PromoController.updatePromoForm(id: Long)
+GET     /deletePromo/:id              controllers.PromoController.deletePromo(id: Long)
+POST    /updatePromoHandle        controllers.PromoController.updatePromoHandle
+GET     /promosForm                controllers.PromoController.getPromos
 
 ## Users
 POST /login                       controllers.UserController.login
