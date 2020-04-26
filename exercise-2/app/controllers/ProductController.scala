@@ -28,6 +28,16 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
     categories.map (cat => Ok(views.html.productadd(productForm, cat)))
   }
 
+  def getProducts: Action[AnyContent] = Action.async { implicit request =>
+    val produkty = productsRepository.list()
+    produkty.map( products => Ok(views.html.products(products)))
+  }
+
+  def deleteProduct(id: Long): Action[AnyContent] = Action { implicit request =>
+      productsRepository.delete(id)
+      Redirect(routes.ProductController.getProducts())
+  }
+
   def addProductHandle = Action.async { implicit request =>
     var categ:Seq[Category] = Seq[Category]()
     val categories = categoryRepo.list().onComplete{
