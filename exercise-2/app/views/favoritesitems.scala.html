@@ -1,0 +1,10 @@
+@(description: Seq[FavoriteItem])
+
+@for(p <- description) {
+    <b>@p.id<b>
+        @p.userId
+        @p.productId
+        @*    <a href="@controllers.routes.ProductController.updateProduct(product.id)">Edit</a>*@
+    <a href="@controllers.routes.FavoriteItemsController.deleteFavoriteItem(p.id)">Delete</a>
+    <br>
+}

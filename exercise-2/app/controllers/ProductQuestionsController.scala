@@ -56,6 +56,16 @@ class ProductQuestionsController @Inject()(cc: MessagesControllerComponents, pro
     )
   }
 
+  def getProductQuestions: Action[AnyContent] = Action.async { implicit request =>
+    val items = productQuestionRepository.list()
+    items.map( p => Ok(views.html.productquestions(p)))
+  }
+
+  def deleteProductQuestion(id: Long): Action[AnyContent] = Action { implicit request =>
+    productQuestionRepository.delete(id)
+    Redirect(routes.ProductQuestionsController.getProductQuestions())
+  }
+
   def readAll: Action[AnyContent] = Action.async {
     val result = productQuestionRepository.list()
     result map { r => Ok(Json.toJson(r));};

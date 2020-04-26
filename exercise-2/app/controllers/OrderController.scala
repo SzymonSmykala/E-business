@@ -61,6 +61,16 @@ class OrderController @Inject()(cc: MessagesControllerComponents, orderRepositor
     )
   }
 
+  def getOrders: Action[AnyContent] = Action.async { implicit request =>
+    val produkty = orderRepository.list()
+    produkty.map( products => Ok(views.html.orders(products)))
+  }
+
+  def deleteOrder(id: Long): Action[AnyContent] = Action { implicit request =>
+    orderRepository.delete(id)
+    Redirect(routes.OrderController.getOrders())
+  }
+
   def get(id: Long) = Action.async {
     val result = orderRepository.getById(id)
     result map {r =>

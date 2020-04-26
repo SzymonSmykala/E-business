@@ -33,6 +33,16 @@ class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favori
     )(FavoriteItemCreateForm.apply)(FavoriteItemCreateForm.unapply)
   }
 
+  def getFavoriteItems: Action[AnyContent] = Action.async { implicit request =>
+    val items = favoriteItemsRepository.list()
+    items.map( p => Ok(views.html.favoritesitems(p)))
+  }
+
+  def deleteFavoriteItem(id: Long): Action[AnyContent] = Action { implicit request =>
+    favoriteItemsRepository.delete(id)
+    Redirect(routes.FavoriteItemsController.getFavoriteItems())
+  }
+
   def addFavoriteItemForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val products = productRepository.list()
     val users = Await.result(userRepository.list(), Duration(10, TimeUnit.SECONDS));

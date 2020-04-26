@@ -31,11 +31,21 @@ class ProductDescriptionController @Inject()(cc: MessagesControllerComponents, p
     )(ProductDescriptionCreateForm.apply)(ProductDescriptionCreateForm.unapply)
   }
 
+  def getProductDescription: Action[AnyContent] = Action.async { implicit request =>
+    val description = productDescriptionRepository.list()
+    description.map( p => Ok(views.html.productdescriptions(p)))
+  }
+
   def addProductQuestionForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val products = productRepository.list()
     products map {p =>
       Ok(views.html.productdescriptionadd(productDescriptionCreateForm, p))
     }
+  }
+
+  def deleteProductDescription(id: Long): Action[AnyContent] = Action { implicit request =>
+    productDescriptionRepository.delete(id)
+    Redirect(routes.ProductDescriptionController.getProductDescription())
   }
 
   def addProductQuestionHandle = Action.async { implicit  request =>

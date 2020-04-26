@@ -72,6 +72,16 @@ class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketIt
 
   }
 
+  def getBasketItems: Action[AnyContent] = Action.async { implicit request =>
+    val items = basketItemRepository.list()
+    items.map( p => Ok(views.html.basketitems(p)))
+  }
+
+  def deleteBasketItem(id: Long): Action[AnyContent] = Action { implicit request =>
+    basketItemRepository.delete(id)
+    Redirect(routes.BasketItemsController.getBasketItems())
+  }
+
   def readAll = Action.async {
     val result = basketItemRepository.list()
     result map { r =>

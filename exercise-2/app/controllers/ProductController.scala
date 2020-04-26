@@ -37,8 +37,8 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
   }
 
   def getProducts: Action[AnyContent] = Action.async { implicit request =>
-    val produkty = productsRepository.list()
-    produkty.map( products => Ok(views.html.products(products)))
+    val items = productsRepository.list()
+    items.map( p => Ok(views.html.products(p)))
   }
 
   def deleteProduct(id: Long): Action[AnyContent] = Action { implicit request =>
