@@ -43,7 +43,7 @@ DELETE  /basketItems/:id            controllers.BasketItemsController.delete(id:
 ## BasketItems Forms
 GET     /basketItemForm             controllers.BasketItemsController.basketItemForm
 POST    /basketItemAddHandler       controllers.BasketItemsController.basketItemAddHandle
-
+GET     /deleteBasketItem:id        controllers.BasketItemsController.deleteBasketItem(id: Long)
 
 ## Basket
 GET     /basket                   controllers.BasketController.readAll
@@ -54,6 +54,8 @@ DELETE  /basket/:id               controllers.BasketController.delete(id: Long)
 ## Basket Forms
 GET     /basketAddForm            controllers.BasketController.addBasketForm
 POST    /basketHandler            controllers.BasketController.addBasketHandle
+GET     /deleteBasket:id          controllers.BasketController.deleteBasket(id: Long)
+
 
 ## Order
 GET     /orders                   controllers.OrderController.readAll
@@ -64,6 +66,7 @@ DELETE  /orders/:id               controllers.OrderController.delete(id: Long)
 ## OrderForms
 GET     /orderFormAdd             controllers.OrderController.addOrderForm
 POST    /orderAddHandler          controllers.OrderController.addOrderHandler
+GET     /deleteOrder:id           controllers.OrderController.deleteOrder(id: Long)
 
 ## Payments
 GET     /payments                   controllers.PaymentController.readAll
@@ -73,6 +76,7 @@ POST    /payments                   controllers.PaymentController.add
 ## Payments Forms
 GET     /addPaymentForm             controllers.PaymentController.addPaymentForm
 POST    /addPaymentHandler          controllers.PaymentController.addPaymentHandle
+GET     /deletePayment:id           controllers.PaymentController.deletePayment(id: Long)
 
 ## Promo
 GET     /promos                   controllers.PromoController.readAll
@@ -101,6 +105,7 @@ DELETE  /favoriteItems/:id               controllers.FavoriteItemsController.del
 ## Favorites items forms
 GET     /favoriteItemForm                controllers.FavoriteItemsController.addFavoriteItemForm
 POST    /favoriteItemHandle              controllers.FavoriteItemsController.addFavoriteItemHandle
+GET     /deleteFavoriteItem/:id          controllers.FavoriteItemsController.deleteFavoriteItem(id: Long)
 
 ## Product questions
 GET     /productQuestions                   controllers.ProductQuestionsController.readAll
@@ -110,7 +115,8 @@ POST    /productQuestions                   controllers.ProductQuestionsControll
 DELETE  /productQuestions/:id               controllers.ProductQuestionsController.delete(id: Long)
 ## ProductQuestion Forms
 GET     /productQuestionForm                controllers.ProductQuestionsController.addProductQuestionForm
-POST    /productQuestionHandle                 controllers.ProductQuestionsController.addProductQuestionHandle
+POST    /productQuestionHandle               controllers.ProductQuestionsController.addProductQuestionHandle
+GET     /deleteProductQuestion/:id          controllers.ProductQuestionsController.deleteProductQuestion(id: Long)
 
 ## Product description
 GET     /productDescriptions                   controllers.ProductDescriptionController.readAll
@@ -121,3 +127,4 @@ DELETE  /productDescriptions/:id               controllers.ProductDescriptionCon
 ## Product description forms
 GET     /productDescriptionForm             controllers.ProductDescriptionController.addProductQuestionForm
 POST    /productDescritionHandle            controllers.ProductDescriptionController.addProductQuestionHandle
+GET     /deleteProductDescription/:id        controllers.ProductDescriptionController.deleteProductDescription(id: Long)
