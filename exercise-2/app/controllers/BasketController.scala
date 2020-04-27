@@ -30,12 +30,12 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
     )(CreateBasketForm.apply)(CreateBasketForm.unapply)
   }
 
-  def addBasketForm()(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def addBasketForm(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val users = userRepository.list()
     users map {user  => Ok(views.html.basketadd(basketForm, user))}
   }
 
-  def addBasketHandle()(): Action[AnyContent] = Action.async { implicit request =>
+  def addBasketHandle(): Action[AnyContent] = Action.async { implicit request =>
     var userSeq:Seq[User] = Seq[User]()
     userRepository.list().onComplete{
       case Success(cat) => userSeq = cat
