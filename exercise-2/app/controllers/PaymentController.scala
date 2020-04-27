@@ -23,11 +23,11 @@ class PaymentController @Inject()(cc: MessagesControllerComponents, paymentRepos
     )(CreatePaymentForm.apply)(CreatePaymentForm.unapply)
   }
 
-  def addPaymentForm: Action[AnyContent] = Action { implicit request =>
+  def addPaymentForm(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.addpayment(paymentForm))
   }
 
-  def addPaymentHandle = Action.async { implicit request =>
+  def addPaymentHandle() = Action.async { implicit request =>
 
     paymentForm.bindFromRequest.fold(
       errorForm => {
@@ -61,14 +61,14 @@ class PaymentController @Inject()(cc: MessagesControllerComponents, paymentRepos
     }
   }
 
-  def update() = Action.async { request =>
+  def update(): Action[AnyContent] = Action.async { request =>
     val json = request.body.asJson.get
     val payment = json.as[Payment]
     val updateResult = paymentRepository.update(payment.id, payment)
     updateResult map {r => Ok(Json.toJson(payment))}
   }
 
-  def add() = Action.async { request =>
+  def add(): Action[AnyContent] = Action.async { request =>
     val json = request.body.asJson.get
     val payment = json.as[Payment]
     val inserted : Future[Payment] = paymentRepository.create(payment.id, payment.status)
@@ -78,12 +78,12 @@ class PaymentController @Inject()(cc: MessagesControllerComponents, paymentRepos
     }
   }
 
-  def readAll = Action.async { request =>
+  def readAll: Action[AnyContent] = Action.async { request =>
     val result = paymentRepository.list()
     result.map(prod => Ok(Json.toJson(prod)))
   }
 
-  def delete(id: Long) = Action.async{
+  def delete(id: Long): Action[AnyContent] = Action.async{
     val deleteResult = paymentRepository.delete(id)
     deleteResult map {
       r => Ok(Json.toJson(r))

@@ -26,7 +26,7 @@ class OrderController @Inject()(cc: MessagesControllerComponents, orderRepositor
     )(CreateOrderForm.apply)(CreateOrderForm.unapply)
   }
 
-  def addOrderForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def addOrderForm(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val payments = paymentRepository.list()
     val baskets = Await.result(basketRepository.list(), Duration(10, TimeUnit.SECONDS));
     payments map {p =>
@@ -34,7 +34,7 @@ class OrderController @Inject()(cc: MessagesControllerComponents, orderRepositor
     }
   }
 
-  def addOrderHandler = Action.async { implicit  request =>
+  def addOrderHandler()() = Action.async { implicit request =>
     var pay:Seq[Payment] = Seq[Payment]()
     paymentRepository.list().onComplete{
       case Success(value) => pay = value

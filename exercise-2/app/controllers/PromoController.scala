@@ -29,7 +29,7 @@ class PromoController @Inject()(cc: MessagesControllerComponents, promoRepositor
     )(CreatePromoForm.apply)(CreatePromoForm.unapply)
   }
 
-  def addPromoForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def addPromoForm(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val products = productRepository.list()
     products map {p =>
       Ok(views.html.promoadd(promoCreateForm, p))
@@ -51,7 +51,7 @@ class PromoController @Inject()(cc: MessagesControllerComponents, promoRepositor
 
   }
 
-  def updatePromoHandle = Action.async { implicit  request =>
+  def updatePromoHandle() = Action.async { implicit request =>
     var prod:Seq[Product] = Seq[Product]()
     productRepository.list().onComplete{
       case Success(value) => prod = value
@@ -72,7 +72,7 @@ class PromoController @Inject()(cc: MessagesControllerComponents, promoRepositor
   }
 
 
-  def addPromoHandle = Action.async { implicit  request =>
+  def addPromoHandle() = Action.async { implicit request =>
     var prod:Seq[Product] = Seq[Product]()
     productRepository.list().onComplete{
       case Success(value) => prod = value

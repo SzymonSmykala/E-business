@@ -20,10 +20,10 @@ class PaymentRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
   }
 
   def create(id: Long, status: String): Future[Payment] = db.run {
-    (payment.map(c => (c.status))
+    (payment.map(c => c.status)
       returning payment.map(_.id)
-      into {case ((status), id) => Payment(id, status)}
-      ) += (status)
+      into {case (status, id) => Payment(id, status)}
+      ) += status
   }
 
   def list(): Future[Seq[Payment]] = db.run {
