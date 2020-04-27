@@ -7,7 +7,6 @@
 @form(routes.ProductController.addProductHandle()) {
     @helper.CSRF.formField
     @inputText(product("name"))
-    @inputText(product("description"))
 
     <select name="category" id="category">
     @for(cat <- category){

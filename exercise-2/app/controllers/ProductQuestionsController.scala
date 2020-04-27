@@ -13,6 +13,15 @@ import scala.util.{Failure, Success}
 @Singleton
 class ProductQuestionsController @Inject()(cc: MessagesControllerComponents, productQuestionRepository: ProductQuestionRepository, productRepository: ProductRepository) (implicit ec: ExecutionContext)extends MessagesAbstractController(cc) {
 
+
+  val productQuestionUpdateForm: Form[ProductQuestionUpdateForm] = Form {
+    mapping(
+            "id"  -> number,
+      "product" -> number,
+      "question" -> nonEmptyText,
+    )(ProductQuestionUpdateForm.apply)(ProductQuestionUpdateForm.unapply)
+  }
+
   val productQuestionCreateForm: Form[ProductQuestionCreateForm] = Form {
     mapping(
       "product" -> number,
@@ -45,6 +54,16 @@ class ProductQuestionsController @Inject()(cc: MessagesControllerComponents, pro
         }
       }
     )
+  }
+
+  def getProductQuestions: Action[AnyContent] = Action.async { implicit request =>
+    val items = productQuestionRepository.list()
+    items.map( p => Ok(views.html.productquestions(p)))
+  }
+
+  def deleteProductQuestion(id: Long): Action[AnyContent] = Action { implicit request =>
+    productQuestionRepository.delete(id)
+    Redirect(routes.ProductQuestionsController.getProductQuestions())
   }
 
   def readAll: Action[AnyContent] = Action.async {
@@ -83,5 +102,5 @@ class ProductQuestionsController @Inject()(cc: MessagesControllerComponents, pro
   }
 }
 
-
+case class ProductQuestionUpdateForm(var id: Int, var product: Int, var questionContent: String)
 case class ProductQuestionCreateForm(var product: Int, var questionContent: String)

@@ -18,11 +18,29 @@ import scala.util.{Failure, Success}
 @Singleton
 class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favoriteItemsRepository: FavoriteItemsRepository, userRepository: UserRepository, productRepository: ProductRepository) (implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
+  val favoriteItemUpdateForm: Form[FavoriteItemUpdateForm] = Form {
+    mapping(
+      "id" -> number,
+      "user" -> number,
+      "product" -> number,
+    )(FavoriteItemUpdateForm.apply)(FavoriteItemUpdateForm.unapply)
+  }
+
   val favoriteItemForm: Form[FavoriteItemCreateForm] = Form {
     mapping(
       "user" -> number,
       "product" -> number,
     )(FavoriteItemCreateForm.apply)(FavoriteItemCreateForm.unapply)
+  }
+
+  def getFavoriteItems: Action[AnyContent] = Action.async { implicit request =>
+    val items = favoriteItemsRepository.list()
+    items.map( p => Ok(views.html.favoritesitems(p)))
+  }
+
+  def deleteFavoriteItem(id: Long): Action[AnyContent] = Action { implicit request =>
+    favoriteItemsRepository.delete(id)
+    Redirect(routes.FavoriteItemsController.getFavoriteItems())
   }
 
   def addFavoriteItemForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
@@ -98,4 +116,5 @@ class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favori
   }
 }
 
+case class FavoriteItemUpdateForm(var id: Int, var user: Int, var product: Int)
 case class FavoriteItemCreateForm(var user: Int, var product: Int)

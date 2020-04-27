@@ -2,14 +2,12 @@ package controllers
 
 import java.util.concurrent.TimeUnit
 
-import javax.inject.Inject
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
-import play.api.libs.json._
-import javax.inject._
-import models.{Basket, BasketItem, BasketItemRepository, BasketRepository, ProductRepository, Product}
+import javax.inject.{Inject, _}
+import models._
 import play.api.data.Form
-import play.api.data.Forms._
-import play.api.data.Forms.mapping
+import play.api.data.Forms.{mapping, _}
+import play.api.libs.json._
+import play.api.mvc._
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -18,6 +16,15 @@ import scala.util.{Failure, Success}
 
 @Singleton
 class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketItemRepository: BasketItemRepository, productRepository: ProductRepository, basketRepository: BasketRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+
+  val basketItemFormUpdate: Form[UpdateBasketItemForm] = Form {
+    mapping(
+      "id" -> number,
+      "product" -> number,
+      "count" ->number,
+      "basket" -> number,
+    )(UpdateBasketItemForm.apply)(UpdateBasketItemForm.unapply)
+  }
 
   val basketItemFormCreate: Form[CreateBasketItemForm] = Form {
     mapping(
@@ -60,7 +67,64 @@ class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketIt
         }
       }
     )
+  }
 
+  def updateBasketItem(id: Long): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    var baskets:Seq[Basket] = Seq[Basket]()
+    basketRepository.list().onComplete{
+      case Success(cat) => baskets = cat
+      case Failure(_) => print("fail")
+    }
+
+    var products: Seq[Product] = Seq[Product]()
+    productRepository.list().onComplete{
+      case Success(p) => products = p
+      case Failure(_) => print("fail")
+    }
+
+    val basket = basketItemRepository.getById(id)
+    basket.map(b => {
+      val prodForm = basketItemFormUpdate.fill(UpdateBasketItemForm(id.toInt, b.productId.toInt, b.count, b.basketId.toInt))
+      Ok(views.html.basketitemupdate(prodForm, products, baskets))
+    })
+  }
+
+  def updateBasketItemHandle(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    var baskets:Seq[Basket] = Seq[Basket]()
+    basketRepository.list().onComplete{
+      case Success(cat) => baskets = cat
+      case Failure(_) => print("fail")
+    }
+
+    var products: Seq[Product] = Seq[Product]()
+    productRepository.list().onComplete{
+      case Success(p) => products = p
+      case Failure(_) => print("fail")
+    }
+
+    basketItemFormUpdate.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.basketitemupdate(errorForm, products, baskets))
+        )
+      },
+      product => {
+        basketItemRepository.update(product.id, BasketItem(product.id, product.product, product.count, product.basket)).map { _ =>
+          Redirect(routes.BasketItemsController.updateBasketItem(product.id)).flashing("success" -> "basket item updated")
+        }
+      }
+    )
+
+  }
+
+  def getBasketItems: Action[AnyContent] = Action.async { implicit request =>
+    val items = basketItemRepository.list()
+    items.map( p => Ok(views.html.basketitems(p)))
+  }
+
+  def deleteBasketItem(id: Long): Action[AnyContent] = Action { implicit request =>
+    basketItemRepository.delete(id)
+    Redirect(routes.BasketItemsController.getBasketItems())
   }
 
   def readAll = Action.async {
@@ -100,5 +164,5 @@ class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketIt
     }
   }
 }
-
+case class UpdateBasketItemForm(var id: Int, var product: Int, var count: Int, var basket: Int)
 case class CreateBasketItemForm(var product: Int, var count: Int, var basket: Int)

@@ -44,6 +44,16 @@ class PaymentController @Inject()(cc: MessagesControllerComponents, paymentRepos
 
   }
 
+  def getPayments: Action[AnyContent] = Action.async { implicit request =>
+    val items = paymentRepository.list()
+    items.map( p => Ok(views.html.payments(p)))
+  }
+
+  def deletePayment(id: Long): Action[AnyContent] = Action { implicit request =>
+    paymentRepository.delete(id)
+    Redirect(routes.PaymentController.getPayments())
+  }
+
   def get(id: Long) = Action.async {
     val result = paymentRepository.getById(id)
     result map {r =>
