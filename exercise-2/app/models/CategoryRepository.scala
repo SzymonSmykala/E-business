@@ -21,10 +21,10 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
   }
 
   def create(id: Long, name: String): Future[Category] = db.run {
-    (category.map(c => (c.name))
+    (category.map(c => c.name)
       returning category.map(_.id)
-      into {case ((name, id)) => Category(id, name)}
-      ) += (name)
+      into {case (name, id) => Category(id, name)}
+      ) += name
   }
 
   def list(): Future[Seq[Category]] = db.run {

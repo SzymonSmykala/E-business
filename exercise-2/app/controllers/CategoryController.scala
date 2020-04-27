@@ -30,7 +30,7 @@ class CategoryController @Inject()(cc: MessagesControllerComponents)(implicit ec
     c.map( cat => Ok(views.html.categories(cat)))
   }
 
-  def addCategoryForm: Action[AnyContent] = Action { implicit request =>
+  def addCategoryForm(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.addcategory(categoryForm))
   }
 
@@ -57,7 +57,7 @@ class CategoryController @Inject()(cc: MessagesControllerComponents)(implicit ec
     )
   }
 
-  def addCategoryFormHandler = Action.async { implicit request =>
+  def addCategoryFormHandler() = Action.async { implicit request =>
 
     categoryForm.bindFromRequest.fold(
       errorForm => {

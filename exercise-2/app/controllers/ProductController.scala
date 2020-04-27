@@ -31,7 +31,7 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
   }
 
 
-  def addProduct: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def addProduct()(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val categories = categoryRepo.list()
     categories.map (cat => Ok(views.html.productadd(productForm, cat)))
   }
@@ -81,7 +81,7 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
 
   }
 
-  def addProductHandle = Action.async { implicit request =>
+  def addProductHandle() = Action.async { implicit request =>
     var categ:Seq[Category] = Seq[Category]()
     val categories = categoryRepo.list().onComplete{
       case Success(cat) => categ = cat

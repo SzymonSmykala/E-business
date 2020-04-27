@@ -43,7 +43,7 @@ class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favori
     Redirect(routes.FavoriteItemsController.getFavoriteItems())
   }
 
-  def addFavoriteItemForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def addFavoriteItemForm(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val products = productRepository.list()
     val users = Await.result(userRepository.list(), Duration(10, TimeUnit.SECONDS));
     products map {p =>
@@ -51,7 +51,7 @@ class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favori
     }
   }
 
-  def addFavoriteItemHandle = Action.async { implicit  request =>
+  def addFavoriteItemHandle() = Action.async { implicit request =>
     var prod:Seq[Product] = Seq[Product]()
     productRepository.list().onComplete{
       case Success(value) => prod = value

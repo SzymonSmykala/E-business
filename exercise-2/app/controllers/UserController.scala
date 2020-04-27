@@ -23,9 +23,9 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
     }
 
     def register = Action.async { request =>
-      var json = request.body.asJson.get
-      var user = json.as[User]
-      var result = userRepository.create(user.id, user.email, user.password)
+      val json = request.body.asJson.get
+      val user = json.as[User]
+      val result = userRepository.create(user.id, user.email, user.password)
       result map {
         r => Ok(Json.toJson(user.id))
       }

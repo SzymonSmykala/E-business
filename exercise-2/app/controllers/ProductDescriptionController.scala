@@ -36,7 +36,7 @@ class ProductDescriptionController @Inject()(cc: MessagesControllerComponents, p
     description.map( p => Ok(views.html.productdescriptions(p)))
   }
 
-  def addProductQuestionForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def addProductQuestionForm(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val products = productRepository.list()
     products map {p =>
       Ok(views.html.productdescriptionadd(productDescriptionCreateForm, p))
@@ -48,7 +48,7 @@ class ProductDescriptionController @Inject()(cc: MessagesControllerComponents, p
     Redirect(routes.ProductDescriptionController.getProductDescription())
   }
 
-  def addProductQuestionHandle = Action.async { implicit  request =>
+  def addProductQuestionHandle() = Action.async { implicit request =>
     var prod:Seq[Product] = Seq[Product]()
     productRepository.list().onComplete{
       case Success(value) => prod = value

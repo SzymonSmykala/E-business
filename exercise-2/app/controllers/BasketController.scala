@@ -30,14 +30,14 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
     )(CreateBasketForm.apply)(CreateBasketForm.unapply)
   }
 
-  def addBasketForm: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def addBasketForm()(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val users = userRepository.list()
     users map {user  => Ok(views.html.basketadd(basketForm, user))}
   }
 
-  def addBasketHandle = Action.async { implicit request =>
+  def addBasketHandle()(): Action[AnyContent] = Action.async { implicit request =>
     var userSeq:Seq[User] = Seq[User]()
-    val categories = userRepository.list().onComplete{
+    userRepository.list().onComplete{
       case Success(cat) => userSeq = cat
       case Failure(_) => print("fail")
     }
@@ -102,21 +102,21 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
 
   }
 
-  def readAll = Action.async {
+  def readAll: Action[AnyContent] = Action.async {
     val result = basketRepository.list()
     result map { r =>
       Ok(Json.toJson(r))
     }
   }
 
-  def get(id: Long) = Action.async {
+  def get(id: Long): Action[AnyContent] = Action.async {
     val result = basketRepository.getById(id);
     result map { r =>
       Ok(Json.toJson(r))
     }
   }
 
-  def add() = Action.async { request =>
+  def add(): Action[AnyContent] = Action.async { request =>
     val json = request.body.asJson.get
     val product = json.as[Basket]
     val result = basketRepository.create(product.id, product.userId)
@@ -125,14 +125,14 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
     }
   }
 
-  def delete(id: Long) = Action.async {
+  def delete(id: Long): Action[AnyContent] = Action.async {
     val result = basketRepository.delete(id)
     result map { r =>
       Ok(Json.toJson(r))
     }
   }
 
-  def getByUserId(user_id: Long) = Action.async{
+  def getByUserId(user_id: Long): Action[AnyContent] = Action.async{
     val result = basketRepository.getBasketByUserId(user_id)
     result map {
       r => Ok(Json.toJson(r))

@@ -15,7 +15,7 @@ class ProductDescriptionRepository @Inject() (dbConfigProvider: DatabaseConfigPr
   import productRepository.ProductTable
   private val prod = TableQuery[ProductTable]
 
-  private  var productDescription = TableQuery[ProductDescriptionTable]
+  private val productDescription = TableQuery[ProductDescriptionTable]
   private class ProductDescriptionTable(tag: Tag) extends Table[ProductDescription](tag, "product_description") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def product = column[Long]("product_id")
