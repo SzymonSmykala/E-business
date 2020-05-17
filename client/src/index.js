@@ -8,6 +8,7 @@ import {ProductsView} from "./views/ProductsView";
 import {CategoriesView} from "./views/CategoriesView";
 import {BasketView} from "./views/BasketView";
 import {PromosView} from "./views/PromosView";
+import {PaymentsView} from "./views/PaymentsView";
 
 
 const routing = (
@@ -17,6 +18,7 @@ const routing = (
             <Route exact path="/categories" component={CategoriesView}/>
             <Route exact path="/baskets" component={BasketView}/>
             <Route exact path="/promos" component={PromosView}/>
+            <Route exact path="/payments" component={PaymentsView}/>
         </div>
     </BrowserRouter>
 );
