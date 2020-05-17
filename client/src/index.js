@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route} from 'react-router-dom';
 import {ProductsView} from "./views/ProductsView";
 import {CategoriesView} from "./views/CategoriesView";
+import {BasketView} from "./views/BasketView";
 
 
 const routing = (
@@ -13,6 +14,7 @@ const routing = (
         <div>
             <Route exact path="/products" component={ProductsView}/>
             <Route exact path="/categories" component={CategoriesView}/>
+            <Route exact path="/baskets" component={BasketView}/>
         </div>
     </BrowserRouter>
 );
