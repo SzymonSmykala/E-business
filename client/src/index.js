@@ -5,12 +5,14 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route} from 'react-router-dom';
 import {ProductsView} from "./views/ProductsView";
+import {CategoriesView} from "./views/CategoriesView";
 
 
 const routing = (
     <BrowserRouter>
         <div>
             <Route exact path="/products" component={ProductsView}/>
+            <Route exact path="/categories" component={CategoriesView}/>
         </div>
     </BrowserRouter>
 );
