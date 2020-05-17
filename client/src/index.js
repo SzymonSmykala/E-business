@@ -11,6 +11,7 @@ import {PromosView} from "./views/PromosView";
 import {PaymentsView} from "./views/PaymentsView";
 import {OrderView} from "./views/OrderView";
 import {BasketItemsView} from "./views/BasketItemsView";
+import {ProductQuestionView} from "./views/ProductQuestionView";
 
 
 const routing = (
@@ -23,6 +24,7 @@ const routing = (
             <Route exact path="/payments" component={PaymentsView}/>
             <Route exact path="/orders" component={OrderView}/>
             <Route exact path="/basketItems" component={BasketItemsView}/>
+            <Route exact path="/productQuestions" component={ProductQuestionView}/>
         </div>
     </BrowserRouter>
 );
