@@ -7,6 +7,7 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import {ProductsView} from "./views/ProductsView";
 import {CategoriesView} from "./views/CategoriesView";
 import {BasketView} from "./views/BasketView";
+import {PromosView} from "./views/PromosView";
 
 
 const routing = (
@@ -15,6 +16,7 @@ const routing = (
             <Route exact path="/products" component={ProductsView}/>
             <Route exact path="/categories" component={CategoriesView}/>
             <Route exact path="/baskets" component={BasketView}/>
+            <Route exact path="/promos" component={PromosView}/>
         </div>
     </BrowserRouter>
 );
