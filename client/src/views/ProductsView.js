@@ -35,7 +35,6 @@ export class ProductsView extends Component {
             <th>CategoryId</th>
         </tr>
 
-        console.log("Category: " + this.state.categories.get(6));
         let tableObjects = this.state.products.map(p => (
             <tr>
                 <th>{p.id}</th>
