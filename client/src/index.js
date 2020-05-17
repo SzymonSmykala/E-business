@@ -1,14 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {BrowserRouter, Route} from 'react-router-dom';
+import {ProductsView} from "./views/ProductsView";
+
+
+const routing = (
+    <BrowserRouter>
+        <div>
+            <Route exact path="/products" component={ProductsView}/>
+        </div>
+    </BrowserRouter>
+);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    routing,
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
