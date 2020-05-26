@@ -39,4 +39,18 @@ export class BasketItemService{
 
         return JSON.parse(await result.text());
     }
+
+    async fetchBasketItemsByBasketId(basketId) : Promise<Array<BasketItem>> {
+        let result;
+        try {
+            result = await fetch(API_ENDPOINT + '/basketItems/basket/' + basketId);
+        }catch (e) {
+            console.log(e);
+        }
+        console.log("fetching basket items");
+        let parsed = JSON.parse(await result.text());
+        console.log(parsed);
+        return parsed;
+
+    }
 }
