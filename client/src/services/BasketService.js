@@ -44,7 +44,7 @@ export class BasketService{
             result = await fetch(API_ENDPOINT + '/basket/user/' + userId);
         }catch (e) {
             console.log(e);
-            throw new Error;
+            throw new Error();
         }
         return JSON.parse(await result.text());
     }

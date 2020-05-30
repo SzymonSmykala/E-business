@@ -2,7 +2,7 @@ import * as React from "react";
 import {Component} from "react";
 import {Table} from "reactstrap";
 import {BasketService} from "../services/BasketService";
-import {Product, ProductService} from "../services/ProductService";
+import {ProductService} from "../services/ProductService";
 import {BasketItemService} from "../services/BasketItemService";
 
 export class BasketView extends Component {
