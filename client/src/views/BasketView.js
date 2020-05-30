@@ -50,7 +50,7 @@ export class BasketView extends Component {
         let tableObjects = this.state.basketItems.map(p => (
             <tr>
                 <th>{p.id}</th>
-                <th>{this.state.products.get(p.productId)}</th>
+                <th>{this.state.products.get(p.productId).name}</th>
             </tr>
 
         ));
