@@ -55,8 +55,8 @@ class BasketItemRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, 
     }
   }
 
-  def getBasketItemsByBasketId(basket_id: Long) = db.run {
-    basketItem.filter(_.basket === basket_id).result.head
+  def getBasketItemsByBasketId(basket_id: Long): Future[Seq[BasketItem]] = db.run {
+    basketItem.filter(_.basket === basket_id).result
   }
 
 }
