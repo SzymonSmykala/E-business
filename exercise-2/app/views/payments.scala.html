@@ -1,7 +1,7 @@
 @(payment: Seq[Payment])
 
 @for(p <- payment) {
-    <b>@p.id<b>
+    <strong>@p.id<strong>
         @p.status
         @*    <a href="@controllers.routes.ProductController.updateProduct(product.id)">Edit</a>*@
     <a href="@controllers.routes.PaymentController.deletePayment(p.id)">Delete</a>

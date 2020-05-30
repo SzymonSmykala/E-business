@@ -22,7 +22,6 @@ class PromoRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(impli
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def product = column[Long]("product_id")
     def looseAmount = column[Int]("loose_amount")
-    private def product_fk = foreignKey("prod_fk", product, productTable)(_.id)
     def * = (id, product, looseAmount) <> ((Promo.apply _).tupled, Promo.unapply)
   }
 

@@ -19,7 +19,6 @@ class BasketRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, user
   class BasketTable(tag: Tag) extends Table[Basket](tag, "basket") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def user = column[Long]("user_id")
-    private def userFk = foreignKey("userTable_fk",user, userTable)(_.id)
     def * = (id, user) <> ((Basket.apply _).tupled, Basket.unapply)
   }
 

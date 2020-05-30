@@ -24,11 +24,11 @@ class ProductDescriptionRepository @Inject() (dbConfigProvider: DatabaseConfigPr
     def * = (id, product, description) <> ((ProductDescription.apply _).tupled, ProductDescription.unapply)
   }
 
-  def create(id: Long, product_id: Long, description: String): Future[ProductDescription] = db.run {
+  def create(id: Long, productId: Long, description: String): Future[ProductDescription] = db.run {
     (productDescription.map(c => (c.product, c.description))
       returning productDescription.map(_.id)
       into {case ((product, description), id) => ProductDescription(id, product, description)}
-      ) += (product_id, description)
+      ) += (productId, description)
   }
 
   def list(): Future[Seq[ProductDescription]] = db.run {
