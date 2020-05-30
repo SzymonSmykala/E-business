@@ -1,15 +1,13 @@
 package controllers
 
-import javax.inject.Inject
-import play.api.mvc.{Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
-import play.api.libs.json._
-import javax.inject._
+import javax.inject.{Inject, _}
 import models.{Category, CategoryRepository, Product, ProductRepository}
-import play.api.data.Forms.mapping
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.{mapping, _}
+import play.api.libs.json._
+import play.api.mvc._
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 
@@ -83,10 +81,6 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
 
   def addProductHandle() = Action.async { implicit request =>
     var categ:Seq[Category] = Seq[Category]()
-    val categories = categoryRepo.list().onComplete{
-      case Success(cat) => categ = cat
-      case Failure(_) => print("fail")
-    }
 
     productForm.bindFromRequest.fold(
       errorForm => {

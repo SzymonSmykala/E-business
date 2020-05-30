@@ -1,7 +1,7 @@
 @(description: Seq[FavoriteItem])
 
 @for(p <- description) {
-    <b>@p.id<b>
+    <strong>@p.id<strong>
         @p.userId
         @p.productId
         @*    <a href="@controllers.routes.ProductController.updateProduct(product.id)">Edit</a>*@

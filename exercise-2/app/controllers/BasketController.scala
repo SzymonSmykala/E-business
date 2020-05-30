@@ -132,8 +132,8 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
     }
   }
 
-  def getByUserId(user_id: Long): Action[AnyContent] = Action.async{
-    val result = basketRepository.getBasketByUserId(user_id)
+  def getByUserId(userId: Long): Action[AnyContent] = Action.async{
+    val result = basketRepository.getBasketByUserId(userId)
     result map {
       r => Ok(Json.toJson(r))
     }

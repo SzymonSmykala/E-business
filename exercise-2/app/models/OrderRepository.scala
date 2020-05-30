@@ -23,16 +23,16 @@ class OrderRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, baske
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def payment = column[Long]("payment_id")
     def basket = column[Long]("basket_id")
-    def basket_fk = foreignKey("basket_fk", basket, basketTable)(_.id);
-    def payment_fk = foreignKey("payment_fk", payment, paymentTable)(_.id)
+    def basketFk = foreignKey("basket_fk", basket, basketTable)(_.id);
+    def paymentFk = foreignKey("payment_fk", payment, paymentTable)(_.id)
     def * = (id, basket, payment) <> ((Order.apply _).tupled, Order.unapply)
   }
 
-  def create(id: Long, basket_id: Long, payment_id: Long): Future[Order] = db.run {
+  def create(id: Long, basketId: Long, paymentId: Long): Future[Order] = db.run {
     (order.map(c => (c.basket, c.payment))
       returning order.map(_.id)
       into {case ((basket_id, payment_id), id) => Order(id, basket_id, payment_id)}
-      ) += (basket_id, payment_id)
+      ) += (basketId, paymentId)
   }
 
   def list(): Future[Seq[Order]] = db.run {

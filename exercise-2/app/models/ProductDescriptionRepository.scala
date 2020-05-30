@@ -20,7 +20,7 @@ class ProductDescriptionRepository @Inject() (dbConfigProvider: DatabaseConfigPr
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def product = column[Long]("product_id")
     def description = column[String]("description")
-    def product_fk = foreignKey("prod_fk",product, prod)(_.id)
+    def productFk = foreignKey("prod_fk",product, prod)(_.id)
     def * = (id, product, description) <> ((ProductDescription.apply _).tupled, ProductDescription.unapply)
   }
 

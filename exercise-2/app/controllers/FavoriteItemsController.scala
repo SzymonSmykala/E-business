@@ -108,8 +108,8 @@ class FavoriteItemsController @Inject()(cc: MessagesControllerComponents, favori
     }
   }
 
-  def getByUserId(user_id: Long) = Action.async{
-    val result = favoriteItemsRepository.getFavoriteItemsByUserId(user_id)
+  def getByUserId(userId: Long) = Action.async{
+    val result = favoriteItemsRepository.getFavoriteItemsByUserId(userId)
     result map {
       r => Ok(Json.toJson(r))
     }
