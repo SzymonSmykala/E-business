@@ -20,15 +20,15 @@ class ProductQuestionRepository @Inject() (dbConfigProvider: DatabaseConfigProvi
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def product = column[Long]("product_id")
     def questionContent = column[String]("question_content")
-    def product_fk = foreignKey("prod_fk",product, prod)(_.id)
+    def productFk = foreignKey("prod_fk",product, prod)(_.id)
     def * = (id, product, questionContent) <> ((ProductQuestion.apply _).tupled, ProductQuestion.unapply)
   }
 
-  def create(id: Long, product_id: Long, questionContent: String): Future[ProductQuestion] = db.run {
+  def create(id: Long, productId: Long, questionContent: String): Future[ProductQuestion] = db.run {
     (productQuestion.map(c => (c.product, c.questionContent))
       returning productQuestion.map(_.id)
       into {case ((product, qustionContent), id) => ProductQuestion(id, product, qustionContent)}
-      ) += (product_id, questionContent)
+      ) += (productId, questionContent)
   }
 
   def list(): Future[Seq[ProductQuestion]] = db.run {

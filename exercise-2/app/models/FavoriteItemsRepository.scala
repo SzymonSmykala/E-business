@@ -26,11 +26,11 @@ class FavoriteItemsRepository @Inject() (dbConfigProvider: DatabaseConfigProvide
     def * = (id, user, product) <> ((FavoriteItem.apply _).tupled, FavoriteItem.unapply)
   }
 
-  def create(id: Long, user_id : Long, product_id: Long): Future[FavoriteItem] = db.run {
+  def create(id: Long, userId : Long, productId: Long): Future[FavoriteItem] = db.run {
     (favoriteItem.map(c => (c.user, c.product))
       returning favoriteItem.map(_.id)
       into {case ((user_id, product_id), id) => FavoriteItem(id, user_id, product_id)}
-      ) += (user_id, product_id)
+      ) += (userId, productId)
   }
 
   def list(): Future[Seq[FavoriteItem]] = db.run {
@@ -45,8 +45,8 @@ class FavoriteItemsRepository @Inject() (dbConfigProvider: DatabaseConfigProvide
     favoriteItem.filter(_.id === id).delete
   }
 
-  def getFavoriteItemsByUserId(user_id: Long) = db.run {
-    favoriteItem.filter(_.user === user_id).result.head
+  def getFavoriteItemsByUserId(userId: Long) = db.run {
+    favoriteItem.filter(_.user === userId).result.head
   }
 
 }

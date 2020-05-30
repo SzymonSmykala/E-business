@@ -157,8 +157,8 @@ class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketIt
     }
   }
 
-  def getByBasketId(basket_id: Long) = Action.async{
-    val result = basketItemRepository.getBasketItemsByBasketId(basket_id)
+  def getByBasketId(basketId: Long) = Action.async{
+    val result = basketItemRepository.getBasketItemsByBasketId(basketId)
     result map {
       r => Ok(Json.toJson(r))
     }

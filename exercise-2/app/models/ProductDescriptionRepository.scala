@@ -20,15 +20,15 @@ class ProductDescriptionRepository @Inject() (dbConfigProvider: DatabaseConfigPr
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def product = column[Long]("product_id")
     def description = column[String]("description")
-    def product_fk = foreignKey("prod_fk",product, prod)(_.id)
+    def productFk = foreignKey("prod_fk",product, prod)(_.id)
     def * = (id, product, description) <> ((ProductDescription.apply _).tupled, ProductDescription.unapply)
   }
 
-  def create(id: Long, product_id: Long, description: String): Future[ProductDescription] = db.run {
+  def create(id: Long, productId: Long, description: String): Future[ProductDescription] = db.run {
     (productDescription.map(c => (c.product, c.description))
       returning productDescription.map(_.id)
       into {case ((product, description), id) => ProductDescription(id, product, description)}
-      ) += (product_id, description)
+      ) += (productId, description)
   }
 
   def list(): Future[Seq[ProductDescription]] = db.run {

@@ -15,17 +15,16 @@ class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
 
   import categoryRepository.CategoryTable
 
-  private val categoryTable = TableQuery[CategoryTable]
 
   class ProductTable(tag: Tag) extends Table[Product](tag, "product") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def category = column[Long]("category_id")
     def name = column[String]("name")
-    private def category_fk = foreignKey("cat_fk", category, categoryTable)(_.id)
     def * = (name, category, id) <> ((Product.apply _).tupled, Product.unapply)
   }
 
   val product = TableQuery[ProductTable]
+  private val categoryTable = TableQuery[CategoryTable]
 
   def create(name: String, categoryId: Long, id: Long): Future[Product] = db.run {
     (product.map(c => (c.name, c.category))

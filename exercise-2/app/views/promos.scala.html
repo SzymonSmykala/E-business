@@ -1,7 +1,7 @@
 @(promos: Seq[Promo])
 
 @for(p <- promos) {
-    <b>@p.looseAmount</b>
+    <strong>@p.looseAmount</strong>
     @p.productId
     <a href="@controllers.routes.PromoController.updatePromoForm(p.id)">Edit</a>
      <a href="@controllers.routes.PromoController.deletePromo(p.id)">Delete</a>

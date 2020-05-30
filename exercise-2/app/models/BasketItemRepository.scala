@@ -24,16 +24,16 @@ class BasketItemRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, 
     def product = column[Long]("product_id")
     def count = column[Int]("count")
     def basket = column[Long]("basket_id")
-    def basket_fk = foreignKey("basket_fk", basket, basketTable)(_.id);
-    def product_fk = foreignKey("product_fk", product, productTable)(_.id)
+    def basketFk = foreignKey("basket_fk", basket, basketTable)(_.id);
+    def productFk = foreignKey("product_fk", product, productTable)(_.id)
     def * = (id, product, count, basket) <> ((BasketItem.apply _).tupled, BasketItem.unapply)
   }
 
-  def create(id: Long, product_id: Long, count: Int, basket_id: Long): Future[BasketItem] = db.run {
+  def create(id: Long, producId: Long, count: Int, basketId: Long): Future[BasketItem] = db.run {
     (basketItem.map(c => (c.product, c.count, c.basket))
       returning basketItem.map(_.id)
       into {case ((product_id, count, basket_id), id) => BasketItem(id,product_id, count, basket_id)}
-      ) += (product_id, count, basket_id)
+      ) += (producId, count, basketId)
   }
 
   def list(): Future[Seq[BasketItem]] = db.run {
@@ -55,8 +55,8 @@ class BasketItemRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, 
     }
   }
 
-  def getBasketItemsByBasketId(basket_id: Long): Future[Seq[BasketItem]] = db.run {
-    basketItem.filter(_.basket === basket_id).result
+  def getBasketItemsByBasketId(basketId: Long): Future[Seq[BasketItem]] = db.run {
+    basketItem.filter(_.basket === basketId).result
   }
 
 }

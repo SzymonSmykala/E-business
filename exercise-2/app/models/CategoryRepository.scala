@@ -13,7 +13,7 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
   import profile.api._
 
 
-  private val category = TableQuery[CategoryTable]
+  val category = TableQuery[CategoryTable]
   class CategoryTable(tag: Tag) extends Table[Category](tag, "category") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def name = column[String]("name")
