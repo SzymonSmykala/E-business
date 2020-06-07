@@ -4,7 +4,8 @@ import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 class UserRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext){
   val dbConfig = dbConfigProvider.get[JdbcProfile]
@@ -31,7 +32,7 @@ class UserRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implic
     user.filter(_.id === id).result.head
   }
 
-  def getByEmail(email: String ) : Future[User] = db.run{
+  def getByEmail(email: String): Future[User] = db.run{
     user.filter(_.email === email).result.head
   }
 

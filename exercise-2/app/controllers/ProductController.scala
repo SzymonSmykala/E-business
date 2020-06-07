@@ -28,7 +28,6 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
     )(UpdateProductForm.apply)(UpdateProductForm.unapply)
   }
 
-
   def addProduct()(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val categories = categoryRepo.list()
     categories.map (cat => Ok(views.html.productadd(productForm, cat)))
