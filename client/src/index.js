@@ -13,6 +13,8 @@ import {OrderView} from "./views/OrderView";
 import {BasketItemsView} from "./views/BasketItemsView";
 import {ProductQuestionView} from "./views/ProductQuestionView";
 import {FavoriteItemsView} from "./views/FavoriteItemsView";
+import {LoginView} from "./views/LoginView";
+import {LoginCallbackView} from "./views/LoginCallbackView";
 
 
 const routing = (
@@ -27,6 +29,8 @@ const routing = (
             <Route exact path="/basketItems" component={BasketItemsView}/>
             <Route exact path="/productQuestions" component={ProductQuestionView}/>
             <Route exact path="/favoriteItems" component={FavoriteItemsView}/>
+            <Route exact path="/loginUI" component={LoginView}/>
+            <Route exact path="/auth/google" component={LoginCallbackView}/>
         </div>
     </BrowserRouter>
 );
