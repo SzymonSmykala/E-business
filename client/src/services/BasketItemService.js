@@ -1,5 +1,6 @@
 import API_ENDPOINT from "../configuration/Constants";
 import {HeadersFactory} from "../utils/HeadersFactory";
+import Cookies from 'js-cookie'
 
 export class BasketItem{
     id;
@@ -28,7 +29,7 @@ export class BasketItemService{
                 'headers': new HeadersFactory().create(),
                 body: JSON.stringify({"id":0, "productId": productId,"count":1, "basketId": basketId})
             };
-
+            console.log(options);
             result = await fetch(API_ENDPOINT + '/basketItems', options);
 
         }catch (e) {

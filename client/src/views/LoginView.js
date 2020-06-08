@@ -20,6 +20,9 @@ export class LoginView extends Component {
 
     handleLoginSuccess(response) {
         console.log(response)
+        console.log("TOKEN:" + response.accessToken)
+        Cookies.set('token', response.accessToken)
         Cookies.set('loginInfo', response)
+
     }
 }
