@@ -5,6 +5,7 @@ import {Button, Table} from "reactstrap";
 import {CategoryService} from "../services/CategoryService";
 import {BasketService} from "../services/BasketService";
 import {BasketItemService} from "../services/BasketItemService";
+import {NavBarView} from "./NavBarView";
 
 
 export class ProductsView extends Component {
@@ -55,6 +56,7 @@ export class ProductsView extends Component {
 
         ));
         return <div>
+            <NavBarView/>
             <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh', marginLeft: '10vh', marginRight: '10vh'}}>
                 <Table>
                     <thead>

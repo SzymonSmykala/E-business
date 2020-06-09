@@ -8,13 +8,14 @@ import models.{Basket, BasketRepository, Category, Product, User, UserRepository
 import play.api.data.Forms.mapping
 import play.api.data.Form
 import play.api.data.Forms._
+import services.TokenManager
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 
 @Singleton
-class BasketController @Inject()(cc: MessagesControllerComponents, basketRepository: BasketRepository, userRepository: UserRepository)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
+class BasketController @Inject()(cc: MessagesControllerComponents, basketRepository: BasketRepository, userRepository: UserRepository, tokenManager: TokenManager)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
 
 
   val basketFormUpdate: Form[UpdateBasketForm] = Form {
@@ -132,8 +133,9 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
     }
   }
 
-  def getByUserId(userId: Long): Action[AnyContent] = Action.async{
-    val result = basketRepository.getBasketByUserId(userId)
+  def getByUserId(userId: Long): Action[AnyContent] = Action.async{ implicit request =>
+    val user = tokenManager.getUserBy(request.headers.get("token").get)
+    val result = basketRepository.getBasketByUserId(user.id)
     result map {
       r => Ok(Json.toJson(r))
     }

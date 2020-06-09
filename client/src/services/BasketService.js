@@ -1,4 +1,5 @@
 import API_ENDPOINT from "../configuration/Constants";
+import {HeadersFactory} from "../utils/HeadersFactory";
 
 export class Basket{
     id;
@@ -22,9 +23,7 @@ export class BasketService{
         try {
             let options = {
                 'method': 'POST',
-                'headers': {
-                    'Content-Type': 'application/json'
-                },
+                'headers': new HeadersFactory().create(),
                 body: JSON.stringify({"id":1 ,"userId":userId})
 
             };
@@ -41,7 +40,11 @@ export class BasketService{
     async getActiveBasketByUserId(userId) : Promise<Basket>{
         let result;
         try {
-            result = await fetch(API_ENDPOINT + '/basket/user/' + userId);
+            let options = {
+                'method': 'GET',
+                'headers': new HeadersFactory().create()
+            };
+            result = await fetch(API_ENDPOINT + '/basket/user/' + userId, options);
         }catch (e) {
             console.log(e);
             throw new Error();
