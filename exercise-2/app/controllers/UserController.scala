@@ -37,8 +37,8 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
 
     try {
       val result = Await.result(userRepository.getByEmail(info.email), Duration.Inf)
-      if (result.email.isEmpty){
-        throw new Exception()
+      if (result.email.isBlank || result == null || result.email.isEmpty){
+        addToRepo(info);
       }
     } catch {
       case _: Throwable => addToRepo(info)

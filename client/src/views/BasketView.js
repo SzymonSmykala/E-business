@@ -33,6 +33,8 @@ export class BasketView extends Component {
         let fetched = await this.basketService.fetchAll();
         let products = await this.productService.fetchAll();
         products.map(p => this.state.products.set(p.id, p));
+        console.log("PRODUCTS");
+        console.log(products);
         let basket = await this.basketService.getActiveBasketByUserId(this.defaultUserId);
         let basketItems = await this.basketItemsService.fetchBasketItemsByBasketId(basket.id);
         this.setState({basketItems: basketItems});
@@ -44,7 +46,7 @@ export class BasketView extends Component {
     }
 
     render() {
-        const {fetched, orderReady, orderId} = this.state;
+        const {fetched, orderReady, orderId, products} = this.state;
         if (!fetched){
             return null;
         }
@@ -57,6 +59,7 @@ export class BasketView extends Component {
             <th>Id</th>
             <th>Product Name</th>
             <th>Count</th>
+            <th>Price</th>
         </tr>
         console.log(this.state.basketItems);
         let tableObjects = this.state.basketItems.map(p => (
@@ -64,6 +67,7 @@ export class BasketView extends Component {
                 <th>{p.id}</th>
                 <th>{this.state.products.get(p.productId).name}</th>
                 <th>{p.count}</th>
+                <th>{p.count * products.get(p.productId).price}</th>
             </tr>
 
         ));

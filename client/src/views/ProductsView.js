@@ -43,6 +43,7 @@ export class ProductsView extends Component {
             <th>Id</th>
             <th>Name</th>
             <th>CategoryId</th>
+            <th>Price</th>
             <th>Actions</th>
         </tr>
 
@@ -51,6 +52,7 @@ export class ProductsView extends Component {
                 <th>{p.id}</th>
                 <th>{p.name}</th>
                 <th>{this.state.categories.get(p.categoryId)}</th>
+                <th>{p.price}</th>
                 <th><Button onClick={() => this.handleProductAddToBasketClick(p.id)}>Add to basket</Button> </th>
             </tr>
 

@@ -18,6 +18,7 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
     mapping(
       "name" -> nonEmptyText,
       "category" -> number,
+            "price" -> number
     )(CreateProductForm.apply)(CreateProductForm.unapply)
   }
   val productFormUpdate: Form[UpdateProductForm] = Form {
@@ -25,6 +26,7 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
       "id" -> number,
       "name" -> nonEmptyText,
       "category" -> number,
+            "price" -> number
     )(UpdateProductForm.apply)(UpdateProductForm.unapply)
   }
 
@@ -51,7 +53,7 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
     }
     val produkt = productsRepository.getById(id)
     produkt.map(product => {
-      val prodForm = productFormUpdate.fill(UpdateProductForm(product.id.toInt, product.name,product.categoryId.toInt))
+      val prodForm = productFormUpdate.fill(UpdateProductForm(product.id.toInt, product.name,product.categoryId.toInt, product.price))
       Ok(views.html.productupdate(prodForm, categories))
     })
   }
@@ -70,7 +72,7 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
         )
       },
       product => {
-        productsRepository.update(product.id, Product(product.name, product.category, product.id)).map { _ =>
+        productsRepository.update(product.id, Product(product.name, product.category, product.id, product.price)).map { _ =>
           Redirect(routes.ProductController.updateProduct(product.id)).flashing("success" -> "product updated")
         }
       }
@@ -88,7 +90,7 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
         )
       },
       product => {
-        productsRepository.create(product.name, product.category.toLong, 1).map { _ =>
+        productsRepository.create(product.name, product.category.toLong, 1, product.price).map { _ =>
           Ok("Ok")
         }
       }
@@ -114,7 +116,7 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
   def add():Action[AnyContent] = Action.async{ implicit request: MessagesRequest[AnyContent]  =>
       val json = request.body.asJson.get
       val product = json.as[Product]
-      val inserted : Future[Product] = productsRepository.create(product.name, product.categoryId, product.id)
+      val inserted : Future[Product] = productsRepository.create(product.name, product.categoryId, product.id, product.price)
       inserted map {
         i =>
           Ok(Json.toJson(i))
@@ -133,5 +135,5 @@ class ProductController @Inject()(productsRepository: ProductRepository,  catego
     }
   }
 }
-case class CreateProductForm(var name: String, var category: Int)
-case class UpdateProductForm(var id: Int, var name: String, var category: Int)
+case class CreateProductForm(var name: String, var category: Int, var price: Int)
+case class UpdateProductForm(var id: Int, var name: String, var category: Int, var price: Int)

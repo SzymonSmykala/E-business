@@ -2,10 +2,27 @@ import * as React from "react";
 import {Component} from "react";
 import GoogleLogin from "react-google-login";
 import Cookies from 'js-cookie'
+import {Redirect} from "react-router-dom";
+import {LoginService} from "../services/LoginService";
 
 export class LoginView extends Component {
 
+
+    loginService: LoginService;
+
+    constructor() {
+        super();
+        this.loginService = new LoginService();
+        this.state = {redirect:false}
+    }
+
     render() {
+
+        const {redirect} = this.state;
+
+        if (redirect) {
+            return <Redirect to="/products"/>
+        }
 
         return <div>
             <GoogleLogin
@@ -19,10 +36,8 @@ export class LoginView extends Component {
     }
 
     handleLoginSuccess(response) {
-        console.log(response)
-        console.log("TOKEN:" + response.accessToken)
         Cookies.set('token', response.accessToken)
         Cookies.set('loginInfo', response)
-
+        this.loginService.login().then(this.setState({redirect: true}));
     }
 }
