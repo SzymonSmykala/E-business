@@ -5,6 +5,7 @@ import {Button} from "reactstrap";
 import {BasketService} from "../services/BasketService";
 import {BasketItemService} from "../services/BasketItemService";
 import {ProductService} from "../services/ProductService";
+import {Redirect} from "react-router-dom";
 
 export class PlaceOrderView extends Component {
 
@@ -21,7 +22,7 @@ export class PlaceOrderView extends Component {
         this.basketService = new BasketService();
         this.basketItemService = new BasketItemService();
         this.productService = new ProductService();
-        this.state = {"orderId": this.props.match.params.orderId, fetched: false, products: new Map(), basketItems: [], total: 0};
+        this.state = {"orderId": this.props.match.params.orderId, fetched: false, products: new Map(), basketItems: [], total: 0, backToShoppingRedirect: false};
     }
 
     componentDidMount = async () => {
@@ -39,11 +40,16 @@ export class PlaceOrderView extends Component {
     };
 
     render(){
-        let {paymentStatus, fetched, total} = this.state;
+        let {paymentStatus, fetched, total, backToShoppingRedirect} = this.state;
         if (!fetched)
         {
             return null;
         }
+
+        if (backToShoppingRedirect){
+            return <Redirect to="/products"/>
+        }
+
         var payStatusButton;
         if (paymentStatus !== "completed"){
             payStatusButton = <Button color="danger" >Not Paid</Button>
@@ -68,6 +74,7 @@ export class PlaceOrderView extends Component {
                     </tr>
                     </tbody>
                 </table>
+            <div><Button onClick={() => this.backToShoppingHandle()}>Back to shopping</Button></div>
 
         </div>)
 
@@ -85,5 +92,9 @@ export class PlaceOrderView extends Component {
         let payment = await this.paymentService.completePayment(paymentId)
         this.setState({paymentStatus: payment.status});
         this.forceUpdate()
+    }
+
+    backToShoppingHandle() {
+        this.setState({backToShoppingRedirect:true})
     }
 }
