@@ -148,7 +148,7 @@ class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketIt
 
     val json = request.body.asJson.get
     val basketItem = json.as[BasketItem]
-    basketItem.basketId = Await.result(basketRepository.getBasketByUserId(user.id), Duration.Inf).id
+//    basketItem.basketId = Await.result(basketRepository.getBasketByUserId(user.id), Duration.Inf).id
     val result = basketItemRepository.create(basketItem.id, basketItem.productId, basketItem.count, basketItem.basketId)
     result map { r =>
       Ok(Json.toJson(r))

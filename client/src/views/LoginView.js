@@ -36,6 +36,7 @@ export class LoginView extends Component {
     }
 
     handleLoginSuccess(response) {
+        console.log(response);
         Cookies.set('token', response.accessToken)
         Cookies.set('loginInfo', response)
         this.loginService.login().then(this.setState({redirect: true}));

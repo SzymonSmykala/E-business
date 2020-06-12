@@ -33,8 +33,6 @@ export class BasketView extends Component {
         let fetched = await this.basketService.fetchAll();
         let products = await this.productService.fetchAll();
         products.map(p => this.state.products.set(p.id, p));
-        console.log("PRODUCTS");
-        console.log(products);
         let basket = await this.basketService.getActiveBasketByUserId(this.defaultUserId);
         let basketItems = await this.basketItemsService.fetchBasketItemsByBasketId(basket.id);
         this.setState({basketItems: basketItems});

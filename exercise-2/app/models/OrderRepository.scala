@@ -47,6 +47,10 @@ class OrderRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, baske
     order.filter(_.id === id).delete
   }
 
+  def getByBasketId(id: Long): Future[Seq[Order]] = db.run {
+    order.filter(_.basket === id).result
+  }
+
   def update(id: Long, newOrder: Order): Future[Unit] = {
     val orderToUpdate: Order = newOrder.copy(id, newOrder.basketId, newOrder.paymentId)
     db.run {

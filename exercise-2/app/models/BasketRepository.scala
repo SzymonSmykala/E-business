@@ -52,4 +52,8 @@ class BasketRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, user
     basket.filter(_.user === userId).result.head
   }
 
+  def getAllBasketsByUser(user: User): Future[Seq[Basket]] = db.run {
+    basket.filter(_.user === user.id).result
+  }
+
 }
