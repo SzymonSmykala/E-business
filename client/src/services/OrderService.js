@@ -46,4 +46,16 @@ export class OrderService {
         }
         return JSON.parse(await result.text());
     }
+
+    async getOrderByBasketId(basketId):Promise<Array<Order>> {
+        let result;
+        try {
+            result = await fetch(API_ENDPOINT + '/orderByBasket/' +  basketId);
+        }catch (e) {
+            console.log(e);
+        }
+        return JSON.parse(await result.text());
+
+    }
 }
+

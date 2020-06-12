@@ -34,6 +34,8 @@ export class BasketView extends Component {
         let products = await this.productService.fetchAll();
         products.map(p => this.state.products.set(p.id, p));
         let basket = await this.basketService.getActiveBasketByUserId(this.defaultUserId);
+        console.log("BASKET:")
+        console.log(basket)
         let basketItems = await this.basketItemsService.fetchBasketItemsByBasketId(basket.id);
         this.setState({basketItems: basketItems});
         this.setState({basket: basket});
@@ -88,9 +90,10 @@ export class BasketView extends Component {
     }
 
     processCheckout = async () => {
-        let payment = await this.paymentService.createNewPayment();
-        let order = await this.orderService.create(this.state.basket.id, payment.id);
-        this.setState({orderId: order.id})
+        let order = await this.orderService.getOrderByBasketId(this.state.basket.id);
+        console.log("ORDER:")
+        console.log(order)
+        this.setState({orderId: order[0].id})
         this.setState({orderReady: true})
     }
 }

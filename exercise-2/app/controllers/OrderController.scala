@@ -123,6 +123,11 @@ class OrderController @Inject()(cc: MessagesControllerComponents, orderRepositor
     Ok(Json.toJson(orders))
   }
 
+  def getOrderByBasketId(basketId: Long) = Action {implicit request =>
+      val order = Await.result(orderRepository.getByBasketId(basketId), Duration.Inf);
+      Ok(Json.toJson(order));
+  }
+
 }
 
 case class UpdateOrderForm(var id: Int, var basket: Int, var payment: Int)
