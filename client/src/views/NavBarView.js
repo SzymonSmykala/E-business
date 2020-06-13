@@ -33,7 +33,6 @@ export class NavBarView extends Component {
                                 <NavLink href="/baskets">Basket</NavLink>
                             </NavItem>
                         </Nav>
-                        <LoginView/>
                     </Collapse>
                 </Navbar>
             </div>

@@ -110,7 +110,8 @@ class OrderController @Inject()(cc: MessagesControllerComponents, orderRepositor
 
   def getOrdersByUser = Action {implicit request =>
     val token = request.headers.get("token");
-    val user = tokenManger.getUserBy(token.get);
+    val loginProvider = request.headers.get("loginProvider");
+    val user = tokenManger.getUserBy(token.get, loginProvider.get);
     var baskets = Await.result(basketRepository.getAllBasketsByUser(user), Duration.Inf);
     var orders = Seq[Order]();
     baskets map {

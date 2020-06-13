@@ -33,7 +33,8 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
 
   def loginUsingAuthToken = Action.async { request =>
     val token = request.headers.get("token")
-    val info = tokenManager.getUserInfo(token.get.toString);
+    val loginProvider = request.headers.get("loginProvider");
+    val info = tokenManager.getUserInfo(token.get.toString, loginProvider.get);
 
     try {
       val result = Await.result(userRepository.getByEmail(info.email), Duration.Inf)

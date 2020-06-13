@@ -45,15 +45,28 @@ EXPOSE 8000
 EXPOSE 9000 
 EXPOSE 5000
 EXPOSE 8888
+EXPOSE 3000
+
+# Copy backend project
+COPY ["/exercise-2", "server/"]
+
+# Copy client project
+COPY ["client", "client/"]
+
+# ADD start.sh /
+# RUN chmod +x /start.sh
+
+# Run backend and run client
+
 
 # Verify
-RUN vim --version
-RUN git --version
-RUN java -version  
-RUN scala -version
-RUN sbt -version
-RUN unzip -v
-RUN node --version
-RUN npm --version
-
-CMD ["bash"]
+# RUN vim --version
+# RUN git --version
+# RUN java -version  
+# RUN scala -version
+# RUN sbt -version
+# RUN unzip -v
+# RUN node --version
+# RUN npm --version
+WORKDIR /server
+CMD ["sbt" , "run"]

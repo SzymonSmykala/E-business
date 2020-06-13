@@ -4,6 +4,7 @@ import GoogleLogin from "react-google-login";
 import Cookies from 'js-cookie'
 import {Redirect} from "react-router-dom";
 import {LoginService} from "../services/LoginService";
+import FacebookLogin from 'react-facebook-login';
 
 export class LoginView extends Component {
 
@@ -32,13 +33,33 @@ export class LoginView extends Component {
                 onFailure={(x) => console.log(x)}
                 cookiePolicy={'single_host_origin'}
             />
+            <FacebookLogin
+                appId="3098923260145945"
+                autoLoad={false}
+                size="small"
+                buttonText="Login"
+                fields="name,email,picture"
+                onClick={() => this.fbButtonClicked()}
+                callback={x => this.handleFacebookLoginSuccess(x)} />
         </div>
+    }
+
+    handleFacebookLoginSuccess(response) {
+       console.log(response);
+       Cookies.set('loginProvider', 'facebook');
+       Cookies.set('token', response.accessToken);
+       Cookies.set('loginInfo', response);
     }
 
     handleLoginSuccess(response) {
         console.log(response);
-        Cookies.set('token', response.accessToken)
-        Cookies.set('loginInfo', response)
+        Cookies.set('loginProvider', 'google');
+        Cookies.set('token', response.accessToken);
+        Cookies.set('loginInfo', response);
         this.loginService.login().then(this.setState({redirect: true}));
+    }
+
+    fbButtonClicked() {
+
     }
 }

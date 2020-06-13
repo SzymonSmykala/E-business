@@ -1,0 +1,10 @@
+@(description: Seq[Order])
+
+@for(p <- description) {
+    <strong>@p.id<strong>
+        @p.basketId
+        @p.paymentId
+        @*    <a href="@controllers.routes.ProductController.updateProduct(product.id)">Edit</a>*@
+    <a href="@controllers.routes.OrderController.deleteOrder(p.id)">Delete</a>
+    <br>
+}
