@@ -36,6 +36,13 @@ class JwtAuthenticator @Inject()(tokenManager: TokenManager, userRepository: Use
     }
   }
 
+  def generateToken(email: String): String={
+    val user = Await.result(userRepository.getByEmail(email),Duration.Inf)
+    val userLogin = UserLogin(user.email, user.id);
+    val jwtToken = JwtHelper.createToken(Json.toJson(userLogin).toString());
+    jwtToken
+  }
+
   def generateToken(loginProvider: String, accessToken: String): String ={
     val user = tokenManager.getUserBy(accessToken, loginProvider);
     val userLogin = UserLogin(user.email, user.id);

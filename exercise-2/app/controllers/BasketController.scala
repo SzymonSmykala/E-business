@@ -140,8 +140,7 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
   }
 
   def getByUserId(userId: Long) = Action { implicit request =>
-    val user = tokenManager.getUserBy(request.headers.get("token").get, request.headers.get("loginProvider").get)
-    val user12 = jwtAuthenticator.getUserByToken(request.headers.get("jwtToken").get);
+    val user = jwtAuthenticator.getUserByToken(request.headers.get("jwtToken").get);
     var result: Basket = null;
     try {
       val baskets = Await.result(basketRepository.getAllBasketsByUser(user), Duration.Inf);

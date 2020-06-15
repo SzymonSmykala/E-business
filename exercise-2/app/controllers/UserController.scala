@@ -5,6 +5,7 @@ import models.{User, UserRepository}
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.{JwtAuthenticator, TokenManager, TokenResponse}
+import org.mindrot.jbcrypt.BCrypt
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -24,7 +25,12 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
 
       result map {
         r => {
-            Ok(Json.toJson(r))
+            if (BCrypt.checkpw(user.password, r.password)){
+              val token = jwtAuthenticator.generateToken(user.email)
+              Ok(Json.toJson(JwtTokenResponse(token)))
+            }else {
+              Ok("WRONG PASSWORD");
+            }
         }
       }
     }
@@ -58,9 +64,10 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
     def register = Action.async { request =>
       val json = request.body.asJson.get
       val user = json.as[User]
-      val result = userRepository.create(user.id, user.email, user.password)
+      val passwordHash = BCrypt.hashpw(user.password, BCrypt.gensalt())
+      val result = userRepository.create(user.id, user.email, passwordHash)
       result map {
-        r => Ok(Json.toJson(user.id))
+        r => Ok(Json.toJson(r))
       }
     }
 

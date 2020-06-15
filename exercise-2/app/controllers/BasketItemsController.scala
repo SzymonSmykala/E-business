@@ -143,9 +143,6 @@ class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketIt
   }
 
   def add() = Action.async { request =>
-    val token = request.headers.get("token")
-    val loginProvider = request.headers.get("loginProvider")
-    val user = tokenManager.getUserBy(token.get, loginProvider.get)
 
     val json = request.body.asJson.get
     val basketItem = json.as[BasketItem]
