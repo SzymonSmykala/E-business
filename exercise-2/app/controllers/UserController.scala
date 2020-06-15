@@ -4,13 +4,18 @@ import javax.inject.{Inject, Singleton}
 import models.{User, UserRepository}
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
-import services.{TokenManager, TokenResponse}
+import services.{JwtAuthenticator, TokenManager, TokenResponse}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 
+case class JwtTokenResponse(var jwtToken: String);
+object JwtTokenResponse{
+  implicit val jwtTokenResponseFormat = Json.format[JwtTokenResponse]
+}
+
 @Singleton
-class UserController @Inject()(cc: ControllerComponents, userRepository: UserRepository, tokenManager: TokenManager) (implicit ec: ExecutionContext) extends AbstractController(cc) {
+class UserController @Inject()(cc: ControllerComponents, userRepository: UserRepository, jwtAuthenticator: JwtAuthenticator, tokenManager: TokenManager) (implicit ec: ExecutionContext) extends AbstractController(cc) {
 
     def login = Action.async { request =>
       val json = request.body.asJson.get
@@ -31,9 +36,10 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
     }
   }
 
-  def loginUsingAuthToken = Action.async { request =>
+  def loginUsingAccessTokenToken = Action.async { request =>
     val token = request.headers.get("token")
     val loginProvider = request.headers.get("loginProvider");
+    val jwtToken = jwtAuthenticator.generateToken(loginProvider.get, token.get);
     val info = tokenManager.getUserInfo(token.get.toString, loginProvider.get);
 
     try {
@@ -45,7 +51,7 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
       case _: Throwable => addToRepo(info)
     }
 
-    Future(Ok("Exists"))
+    Future(Ok(Json.toJson(JwtTokenResponse(jwtToken))));
 
   }
 

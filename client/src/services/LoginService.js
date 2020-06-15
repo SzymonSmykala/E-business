@@ -1,10 +1,13 @@
 import {HeadersFactory} from "../utils/HeadersFactory";
 import API_ENDPOINT from "../configuration/Constants";
-import {Order} from "./OrderService";
+
+class LoginResponse {
+    jwtToken;
+}
 
 export class LoginService{
 
-    async login(): Promise<Order> {
+    async login() : Promise<LoginResponse> {
         let result;
         try {
             let options = {
@@ -17,8 +20,10 @@ export class LoginService{
         }catch (e) {
             console.log(e);
         }
-
-        return JSON.parse(await result.text());
+        const loginResult = JSON.parse(await result.text());
+        console.log("LOGIN RESULT:");
+        console.log(loginResult);
+        return loginResult;
     }
 
 }

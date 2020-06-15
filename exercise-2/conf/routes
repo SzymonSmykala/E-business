@@ -118,7 +118,7 @@ GET     /orderForm                controllers.OrderController.getOrders
 ## Users
 POST /login                       controllers.UserController.login
 POST /register                    controllers.UserController.register
-GET  /tokenLogin                  controllers.UserController.loginUsingAuthToken
+GET  /tokenLogin                  controllers.UserController.loginUsingAccessTokenToken
 
 
 ## Product questions

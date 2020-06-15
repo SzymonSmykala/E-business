@@ -49,14 +49,19 @@ export class LoginView extends Component {
        Cookies.set('loginProvider', 'facebook');
        Cookies.set('token', response.accessToken);
        Cookies.set('loginInfo', response);
+       console.log('calling loginEnpoint..')
+        this.loginService.login().then(this.setState({redirect: true}));
     }
 
-    handleLoginSuccess(response) {
+    async handleLoginSuccess(response) {
         console.log(response);
         Cookies.set('loginProvider', 'google');
         Cookies.set('token', response.accessToken);
         Cookies.set('loginInfo', response);
-        this.loginService.login().then(this.setState({redirect: true}));
+        console.log('calling loginEnpoint..')
+        const loginResponse = await this.loginService.login();
+        Cookies.set('jwtToken', loginResponse.jwtToken);
+        this.setState({redirect: true});
     }
 
     fbButtonClicked() {

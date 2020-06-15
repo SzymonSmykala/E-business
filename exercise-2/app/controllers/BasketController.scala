@@ -8,7 +8,7 @@ import models.{Basket, BasketRepository, Category, OrderRepository, PaymentRepos
 import play.api.data.Forms.mapping
 import play.api.data.Form
 import play.api.data.Forms._
-import services.TokenManager
+import services.{JwtAuthenticator, TokenManager}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -16,7 +16,7 @@ import scala.util.{Failure, Success}
 
 
 @Singleton
-class BasketController @Inject()(cc: MessagesControllerComponents, basketRepository: BasketRepository, userRepository: UserRepository, tokenManager: TokenManager, paymentRepository: PaymentRepository, orderRepository: OrderRepository)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
+class BasketController @Inject()(cc: MessagesControllerComponents, basketRepository: BasketRepository, userRepository: UserRepository, tokenManager: TokenManager, paymentRepository: PaymentRepository, orderRepository: OrderRepository, jwtAuthenticator: JwtAuthenticator)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
 
 
   val basketFormUpdate: Form[UpdateBasketForm] = Form {
@@ -141,6 +141,7 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
 
   def getByUserId(userId: Long) = Action { implicit request =>
     val user = tokenManager.getUserBy(request.headers.get("token").get, request.headers.get("loginProvider").get)
+    val user12 = jwtAuthenticator.getUserByToken(request.headers.get("jwtToken").get);
     var result: Basket = null;
     try {
       val baskets = Await.result(basketRepository.getAllBasketsByUser(user), Duration.Inf);
