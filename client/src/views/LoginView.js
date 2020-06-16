@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 import {Redirect} from "react-router-dom";
 import {LoginService} from "../services/LoginService";
 import FacebookLogin from 'react-facebook-login';
+import {Button} from "reactstrap";
 
 export class LoginView extends Component {
 
@@ -14,15 +15,19 @@ export class LoginView extends Component {
     constructor() {
         super();
         this.loginService = new LoginService();
-        this.state = {redirect:false}
+        this.state = {redirect:false, registerRedirect:false}
     }
 
     render() {
 
-        const {redirect} = this.state;
+        const {redirect, registerRedirect} = this.state;
 
         if (redirect) {
             return <Redirect to="/products"/>
+        }
+
+        if (registerRedirect){
+            return <Redirect to="/register"/>
         }
 
         return <div>
@@ -41,6 +46,7 @@ export class LoginView extends Component {
                 fields="name,email,picture"
                 onClick={() => this.fbButtonClicked()}
                 callback={x => this.handleFacebookLoginSuccess(x)} />
+                <Button onClick={() => this.handleRegisterClicked()}>Register</Button>
         </div>
     }
 
@@ -66,5 +72,9 @@ export class LoginView extends Component {
 
     fbButtonClicked() {
 
+    }
+
+    handleRegisterClicked() {
+        this.setState({registerRedirect: true})
     }
 }
