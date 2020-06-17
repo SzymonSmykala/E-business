@@ -21,8 +21,8 @@ class JwtAuthenticator @Inject()(tokenManager: TokenManager, userRepository: Use
     if (JwtHelper.isValidToken(jwtToken)){
       val decoded = JwtHelper.decodePayload(jwtToken).get
       val user = Json.parse(decoded)
-      val email = user.result.get("email").toString().replaceAll("\"", "").dropRight(1).drop(1);
-      val userId = user.result.get("userId").toString().replaceAll("\"", "")
+      val email = user.result.get("email").toString().replaceAll("\"", "");
+      val userId = user.result.get("userId").toString().replaceAll("\"", "");
 
       val userFromDb = Await.result(userRepository.getById(userId.toLong), Duration.Inf);
       if (email == userFromDb.email.replaceAll("\"", "")){

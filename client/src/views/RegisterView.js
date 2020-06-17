@@ -17,7 +17,6 @@ export class RegisterView extends Component {
 
         console.log("Regisre view")
         return <div>
-            REGISTER PAGE
             <Form>
                 <FormGroup>
                     <Label for="exampleEmail">Email</Label>
