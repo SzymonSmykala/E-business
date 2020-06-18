@@ -150,7 +150,6 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
           val payment = Await.result(paymentRepository.getById(order.paymentId), Duration.Inf);
           if (payment.status != "completed"){
             result = basket;
-//            Ok(Json.toJson(basket))
           }
         }
       }

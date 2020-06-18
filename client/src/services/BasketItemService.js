@@ -42,7 +42,7 @@ export class BasketItemService{
         let result;
         try {
             result = await fetch(API_ENDPOINT + '/basketItems/basket/' + basketId,
-                {headers: new HeadersFactory().create()});;
+                {headers: new HeadersFactory().create()});
         }catch (e) {
             console.log(e);
         }

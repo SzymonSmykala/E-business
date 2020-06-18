@@ -36,7 +36,7 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
     }
 
   def addToRepo(info: TokenResponse) = {
-    val user = userRepository.create(1, info.email, info.userId);
+    userRepository.create(1, info.email, info.userId);
   }
 
   def loginUsingAccessTokenToken = Action.async { request =>
