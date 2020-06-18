@@ -6,7 +6,7 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BasketItemRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, basketRepository: BasketRepository, productRepository: ProductRepository)(implicit ec: ExecutionContext){
+class BasketItemRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, basketRepository: BasketRepository, productRepository: ProductRepository, userRepository: UserRepository)(implicit ec: ExecutionContext){
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._

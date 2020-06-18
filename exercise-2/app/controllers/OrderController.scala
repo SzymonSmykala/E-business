@@ -10,6 +10,7 @@ import models.{Basket, BasketRepository, Order, OrderRepository, Payment, Paymen
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.data.Forms._
+import services.{JwtAuthenticator, TokenManager}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -17,7 +18,7 @@ import scala.util.{Failure, Success}
 
 
 @Singleton
-class OrderController @Inject()(cc: MessagesControllerComponents, orderRepository: OrderRepository, basketRepository: BasketRepository, paymentRepository: PaymentRepository)(implicit ec: ExecutionContext)extends MessagesAbstractController(cc) {
+class OrderController @Inject()(cc: MessagesControllerComponents, orderRepository: OrderRepository, basketRepository: BasketRepository, paymentRepository: PaymentRepository, jwtAutheticator: JwtAuthenticator)(implicit ec: ExecutionContext)extends MessagesAbstractController(cc) {
 
   val orderFormCreate: Form[CreateOrderForm] = Form {
     mapping(
@@ -105,6 +106,25 @@ class OrderController @Inject()(cc: MessagesControllerComponents, orderRepositor
     deleteResult map {
       r => Ok(Json.toJson(r))
     }
+  }
+
+  def getOrdersByUser = Action {implicit request =>
+    val user = jwtAutheticator.getUserByToken(request.headers.get("jwtToken").get);
+    val baskets = Await.result(basketRepository.getAllBasketsByUser(user), Duration.Inf);
+    var orders = Seq[Order]();
+    baskets map {
+      b => {
+        var or = Await.result(orderRepository.getByBasketId(b.id), Duration.Inf);
+        orders = orders ++ or
+      }
+
+    }
+    Ok(Json.toJson(orders))
+  }
+
+  def getOrderByBasketId(basketId: Long) = Action {implicit request =>
+      val order = Await.result(orderRepository.getByBasketId(basketId), Duration.Inf);
+      Ok(Json.toJson(order));
   }
 
 }

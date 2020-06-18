@@ -5,6 +5,7 @@ import {Button, Table} from "reactstrap";
 import {CategoryService} from "../services/CategoryService";
 import {BasketService} from "../services/BasketService";
 import {BasketItemService} from "../services/BasketItemService";
+import {NavBarView} from "./NavBarView";
 
 
 export class ProductsView extends Component {
@@ -42,6 +43,7 @@ export class ProductsView extends Component {
             <th>Id</th>
             <th>Name</th>
             <th>CategoryId</th>
+            <th>Price</th>
             <th>Actions</th>
         </tr>
 
@@ -50,11 +52,13 @@ export class ProductsView extends Component {
                 <th>{p.id}</th>
                 <th>{p.name}</th>
                 <th>{this.state.categories.get(p.categoryId)}</th>
+                <th>{p.price}</th>
                 <th><Button onClick={() => this.handleProductAddToBasketClick(p.id)}>Add to basket</Button> </th>
             </tr>
 
         ));
         return <div>
+            <NavBarView/>
             <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh', marginLeft: '10vh', marginRight: '10vh'}}>
                 <Table>
                     <thead>

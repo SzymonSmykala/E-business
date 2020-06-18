@@ -8,6 +8,7 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, _}
 import play.api.libs.json._
 import play.api.mvc._
+import services.TokenManager
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -15,7 +16,7 @@ import scala.util.{Failure, Success}
 
 
 @Singleton
-class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketItemRepository: BasketItemRepository, productRepository: ProductRepository, basketRepository: BasketRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketItemRepository: BasketItemRepository, productRepository: ProductRepository, basketRepository: BasketRepository, userRepository: UserRepository, tokenManager: TokenManager)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   val basketItemFormUpdate: Form[UpdateBasketItemForm] = Form {
     mapping(
@@ -142,6 +143,7 @@ class BasketItemsController @Inject()(cc: MessagesControllerComponents, basketIt
   }
 
   def add() = Action.async { request =>
+
     val json = request.body.asJson.get
     val basketItem = json.as[BasketItem]
     val result = basketItemRepository.create(basketItem.id, basketItem.productId, basketItem.count, basketItem.basketId)

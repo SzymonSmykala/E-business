@@ -106,6 +106,9 @@ GET     /orders/:id               controllers.OrderController.get(id: Long)
 PUT     /orders                   controllers.OrderController.update
 POST    /orders                   controllers.OrderController.add
 DELETE  /orders/:id               controllers.OrderController.delete(id: Long)
+GET     /ordersByUser              controllers.OrderController.getOrdersByUser
+GET     /orderByBasket/:basketId            controllers.OrderController.getOrderByBasketId(basketId: Long)
+
 ## OrderForms
 GET     /orderFormAdd             controllers.OrderController.addOrderForm
 POST    /orderAddHandler          controllers.OrderController.addOrderHandler
@@ -115,6 +118,7 @@ GET     /orderForm                controllers.OrderController.getOrders
 ## Users
 POST /login                       controllers.UserController.login
 POST /register                    controllers.UserController.register
+GET  /tokenLogin                  controllers.UserController.loginUsingAccessTokenToken
 
 
 ## Product questions

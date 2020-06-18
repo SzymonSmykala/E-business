@@ -4,7 +4,8 @@ import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 class UserRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext){
   val dbConfig = dbConfigProvider.get[JdbcProfile]
@@ -21,17 +22,18 @@ class UserRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implic
   }
 
   def create(id: Long, email: String, password: String): Future[User] = db.run {
+    var newEmail = email.replaceAll("\"", "");
     (user.map(c => (c.email, c.password))
       returning user.map(_.id)
-      into {case ((email, password), id) => User(id, email, password)}
-      ) += (email, password)
+      into {case ((newEmail, password), id) => User(id, newEmail, password)}
+      ) += (newEmail, password)
   }
 
   def getById(id: Long): Future[User] = db.run{
     user.filter(_.id === id).result.head
   }
 
-  def getByEmail(email: String ) : Future[User] = db.run{
+  def getByEmail(email: String): Future[User] = db.run{
     user.filter(_.email === email).result.head
   }
 

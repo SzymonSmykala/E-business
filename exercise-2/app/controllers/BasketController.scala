@@ -4,17 +4,19 @@ import javax.inject.Inject
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, MessagesAbstractController, MessagesControllerComponents, MessagesRequest}
 import play.api.libs.json._
 import javax.inject._
-import models.{Basket, BasketRepository, Category, Product, User, UserRepository}
+import models.{Basket, BasketRepository, Category, OrderRepository, PaymentRepository, Product, User, UserRepository}
 import play.api.data.Forms.mapping
 import play.api.data.Form
 import play.api.data.Forms._
+import services.{JwtAuthenticator, TokenManager}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 
 @Singleton
-class BasketController @Inject()(cc: MessagesControllerComponents, basketRepository: BasketRepository, userRepository: UserRepository)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
+class BasketController @Inject()(cc: MessagesControllerComponents, basketRepository: BasketRepository, userRepository: UserRepository, tokenManager: TokenManager, paymentRepository: PaymentRepository, orderRepository: OrderRepository, jwtAuthenticator: JwtAuthenticator)(implicit ec: ExecutionContext)  extends MessagesAbstractController(cc) {
 
 
   val basketFormUpdate: Form[UpdateBasketForm] = Form {
@@ -132,10 +134,35 @@ class BasketController @Inject()(cc: MessagesControllerComponents, basketReposit
     }
   }
 
-  def getByUserId(userId: Long): Action[AnyContent] = Action.async{
-    val result = basketRepository.getBasketByUserId(userId)
-    result map {
-      r => Ok(Json.toJson(r))
+  def addtoRepo(id: Long) = {
+    val basket = Await.result(basketRepository.create(1, id), Duration.Inf)
+    Ok(Json.toJson(basket))
+  }
+
+  def getByUserId(userId: Long) = Action { implicit request =>
+    val user = jwtAuthenticator.getUserByToken(request.headers.get("jwtToken").get);
+    var result: Basket = null;
+    try {
+      val baskets = Await.result(basketRepository.getAllBasketsByUser(user), Duration.Inf);
+      for (basket <- baskets){
+        var orders = Await.result(orderRepository.getByBasketId(basket.id), Duration.Inf);
+        for (order <- orders){
+          val payment = Await.result(paymentRepository.getById(order.paymentId), Duration.Inf);
+          if (payment.status != "completed"){
+            result = basket;
+          }
+        }
+      }
+      if (result == null) {
+        val basket = Await.result(basketRepository.create(1, user.id), Duration.Inf)
+        val payment = Await.result(paymentRepository.create(1, "new"), Duration.Inf);
+        Await.result(orderRepository.create(1, basket.id, payment.id), Duration.Inf);
+        result = basket
+      }
+      Ok(Json.toJson(result))
+
+    }catch{
+      case _: Throwable => addtoRepo(user.id)
     }
   }
 

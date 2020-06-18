@@ -45,15 +45,26 @@ EXPOSE 8000
 EXPOSE 9000 
 EXPOSE 5000
 EXPOSE 8888
+EXPOSE 3000
+
+
+# Copy client project
+COPY ["client", "client/"]
+
+# Run backend and run client
+
 
 # Verify
-RUN vim --version
-RUN git --version
-RUN java -version  
-RUN scala -version
-RUN sbt -version
-RUN unzip -v
-RUN node --version
-RUN npm --version
+# RUN vim --version
+# RUN git --version
+# RUN java -version  
+# RUN scala -version
+# RUN sbt -version
+# RUN unzip -v
+# RUN node --version
+# RUN npm --version
+WORKDIR /client
 
-CMD ["bash"]
+RUN npm install
+
+CMD ["npm", "start"]

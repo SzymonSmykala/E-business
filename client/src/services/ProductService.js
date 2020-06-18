@@ -4,6 +4,7 @@ export class Product{
     id;
     categoryId;
     name;
+    price;
 }
 
 export class ProductService{

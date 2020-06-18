@@ -13,7 +13,10 @@ import {OrderView} from "./views/OrderView";
 import {BasketItemsView} from "./views/BasketItemsView";
 import {ProductQuestionView} from "./views/ProductQuestionView";
 import {FavoriteItemsView} from "./views/FavoriteItemsView";
-
+import {LoginView} from "./views/LoginView";
+import {PlaceOrderView} from "./views/PlaceOrderView";
+import {MainView} from "./views/MainView";
+import {RegisterView} from "./views/RegisterView";
 
 const routing = (
     <BrowserRouter>
@@ -27,6 +30,10 @@ const routing = (
             <Route exact path="/basketItems" component={BasketItemsView}/>
             <Route exact path="/productQuestions" component={ProductQuestionView}/>
             <Route exact path="/favoriteItems" component={FavoriteItemsView}/>
+            <Route exact path="/login" component={LoginView}/>
+            <Route exact path="/placeOrder/:orderId" component={PlaceOrderView}/>
+            <Route exact path="/register" component={RegisterView}/>
+            <Route exact path="/" component={MainView}/>
         </div>
     </BrowserRouter>
 );

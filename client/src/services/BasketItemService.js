@@ -1,4 +1,5 @@
 import API_ENDPOINT from "../configuration/Constants";
+import {HeadersFactory} from "../utils/HeadersFactory";
 
 export class BasketItem{
     id;
@@ -24,14 +25,11 @@ export class BasketItemService{
         try {
             let options = {
                 'method': 'POST',
-                'headers': {
-                    'Content-Type': 'application/json'
-                },
+                'headers': new HeadersFactory().create(),
                 body: JSON.stringify({"id":0, "productId": productId,"count":1, "basketId": basketId})
-
             };
-
-            result = await fetch(API_ENDPOINT + '/basketItems', options);
+            console.log(options);
+            result = await fetch(API_ENDPOINT + '/basketItems', options)
 
         }catch (e) {
             console.log(e);
@@ -43,7 +41,8 @@ export class BasketItemService{
     async fetchBasketItemsByBasketId(basketId) : Promise<Array<BasketItem>> {
         let result;
         try {
-            result = await fetch(API_ENDPOINT + '/basketItems/basket/' + basketId);
+            result = await fetch(API_ENDPOINT + '/basketItems/basket/' + basketId,
+                {headers: new HeadersFactory().create()});
         }catch (e) {
             console.log(e);
         }
@@ -51,6 +50,5 @@ export class BasketItemService{
         let parsed = JSON.parse(await result.text());
         console.log(parsed);
         return parsed;
-
     }
 }
