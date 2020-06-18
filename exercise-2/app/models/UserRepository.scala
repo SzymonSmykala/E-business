@@ -22,10 +22,11 @@ class UserRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implic
   }
 
   def create(id: Long, email: String, password: String): Future[User] = db.run {
+    var newEmail = email.replaceAll("\"", "");
     (user.map(c => (c.email, c.password))
       returning user.map(_.id)
-      into {case ((email, password), id) => User(id, email, password)}
-      ) += (email, password)
+      into {case ((newEmail, password), id) => User(id, newEmail, password)}
+      ) += (newEmail, password)
   }
 
   def getById(id: Long): Future[User] = db.run{

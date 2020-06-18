@@ -17,13 +17,13 @@ class TokenManager @Inject()(userRepository: UserRepository) {
       if (loginProvider == "google") {
         val result = Http("https://www.googleapis.com/oauth2/v1/tokeninfo").param("access_token", token)
         val p = Json.parse(result.asString.body);
-        return TokenResponse.apply(p.result.get("email").toString(), p.result.get("user_id").toString())
+        return TokenResponse.apply(p.result.get("email").toString().replaceAll("\"", ""), p.result.get("user_id").toString())
       }
 
       if (loginProvider == "facebook"){
         val result = Http("https://graph.facebook.com/me").param("fields", "id, email").param("access_token", token);
         val p = Json.parse(result.asString.body);
-        return TokenResponse.apply(p.result.get("email").toString(), p.result.get("id").toString())
+        return TokenResponse.apply(p.result.get("email").toString().replaceAll("\"", ""), p.result.get("id").toString())
       }
       throw new Exception(loginProvider + " is not a valid Login provider!");
     }

@@ -37,18 +37,17 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
 
   def addToRepo(info: TokenResponse) = {
     val user = userRepository.create(1, info.email, info.userId);
-    user map {u =>
-      Ok("Added new")
-    }
   }
 
   def loginUsingAccessTokenToken = Action.async { request =>
     val token = request.headers.get("token")
     val loginProvider = request.headers.get("loginProvider");
-    val jwtToken = jwtAuthenticator.generateToken(loginProvider.get, token.get);
-    val info = tokenManager.getUserInfo(token.get.toString, loginProvider.get);
+    var jwtToken = ""
+    var info = tokenManager.getUserInfo(token.get.toString, loginProvider.get)
 
     try {
+      jwtToken = jwtAuthenticator.generateToken(loginProvider.get, token.get);
+      info = tokenManager.getUserInfo(token.get.toString, loginProvider.get)
       val result = Await.result(userRepository.getByEmail(info.email), Duration.Inf)
       if (result.email.isBlank || result == null || result.email.isEmpty){
         addToRepo(info);
@@ -56,6 +55,7 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
     } catch {
       case _: Throwable => addToRepo(info)
     }
+    jwtToken = jwtAuthenticator.generateToken(loginProvider.get, token.get);
 
     Future(Ok(Json.toJson(JwtTokenResponse(jwtToken))));
 
