@@ -1,9 +1,0 @@
-@(description: Seq[ProductDescription])
-
-@for(product <- description) {
-    <strong>@product.id<strong>
-    @product.description
-@*    <a href="@controllers.routes.ProductController.updateProduct(product.id)">Edit</a>*@
-    <a href="@controllers.routes.ProductDescriptionController.deleteProductDescription(product.id)">Delete</a>
-    <br>
-}

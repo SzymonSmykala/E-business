@@ -49,7 +49,7 @@ class UserController @Inject()(cc: ControllerComponents, userRepository: UserRep
       jwtToken = jwtAuthenticator.generateToken(loginProvider.get, token.get);
       info = tokenManager.getUserInfo(token.get.toString, loginProvider.get)
       val result = Await.result(userRepository.getByEmail(info.email), Duration.Inf)
-      if (result.email.isBlank || result == null || result.email.isEmpty){
+      if (result == null || result.email.isEmpty){
         addToRepo(info);
       }
     } catch {

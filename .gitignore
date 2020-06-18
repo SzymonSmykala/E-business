@@ -1,2 +1,6 @@
 *.class
 *.log
+
+exercise-1/ServerDocker/client/
+
+exercise-1/ServerDocker/exercise-2/

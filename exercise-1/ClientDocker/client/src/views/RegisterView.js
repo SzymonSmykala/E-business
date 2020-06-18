@@ -45,12 +45,12 @@ export class RegisterView extends Component {
         this.setState({password: password});
     }
 
-    async handleSubmit() {
+    handleSubmit() {
         const {email, password} = this.state;
         try {
-            await this.loginService.register(email, password);
-            this.setState({redirectLogin: true});
-
+            this.loginService.register(email, password).then((x) => {
+                console.log(x);
+            });
         }catch (e) {
             alert("Something went wrong");
         }
