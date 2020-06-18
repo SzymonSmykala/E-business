@@ -1,6 +1,5 @@
 import API_ENDPOINT from "../configuration/Constants";
 import {HeadersFactory} from "../utils/HeadersFactory";
-import Cookies from 'js-cookie'
 
 export class BasketItem{
     id;

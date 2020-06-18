@@ -40,7 +40,7 @@ export class PlaceOrderView extends Component {
     };
 
     render(){
-        let {paymentStatus, fetched, total, backToShoppingRedirect} = this.state;
+        let {paymentStatus, fetched, backToShoppingRedirect} = this.state;
         if (!fetched)
         {
             return null;
