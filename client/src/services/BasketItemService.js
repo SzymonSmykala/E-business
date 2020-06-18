@@ -29,7 +29,7 @@ export class BasketItemService{
                 body: JSON.stringify({"id":0, "productId": productId,"count":1, "basketId": basketId})
             };
             console.log(options);
-            result = await fetch(API_ENDPOINT + '/basketItems', options);
+            result = await fetch(API_ENDPOINT + '/basketItems', options)
 
         }catch (e) {
             console.log(e);
